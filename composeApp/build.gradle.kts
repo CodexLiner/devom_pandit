@@ -60,7 +60,7 @@ kotlin {
             implementation(libs.filekit.dialogs.compose)
             implementation(libs.filekit.coil)
             implementation("network.chaintech:cmpcharts:1.0.0")
-            api("com.devom:platform:1.0.0")
+            implementation("com.devom:platform:alpha.1.0.0")
         }
 
         commonTest.dependencies {
