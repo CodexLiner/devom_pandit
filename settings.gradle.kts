@@ -11,6 +11,7 @@ pluginManagement {
             }
         }
         gradlePluginPortal()
+        mavenLocal()
         mavenCentral()
     }
 }
@@ -25,15 +26,8 @@ dependencyResolutionManagement {
                 includeGroupByRegex("android.*")
             }
         }
+        mavenLocal()
         mavenCentral()
     }
 }
 include(":composeApp")
-include(":devom")
-include(":network")
-include((":core:models"))
-include((":domain"))
-include((":core:utils"))
-include((":data:cache"))
-include((":data:server"))
-include((":data:repository"))
