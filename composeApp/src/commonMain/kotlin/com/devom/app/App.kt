@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
+import com.devom.app.firebase.MyFirebaseMessagingService
 import com.devom.app.theme.AppTheme
 import com.devom.app.ui.components.AppContainer
 import com.devom.app.ui.components.ProgressLoader
@@ -104,6 +105,11 @@ fun MainScreen(isLoggedIn: Boolean) {
                     ProgressLoader()
                 }
             })
+        }
+    }
+    LaunchedEffect(Unit) {
+        MyFirebaseMessagingService.getToken { token , _ ->
+            Logger.d("FIREBASE_ACCESS_TOKEN :- $token")
         }
     }
 }

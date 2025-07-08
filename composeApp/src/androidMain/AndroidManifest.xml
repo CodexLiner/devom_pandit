@@ -3,8 +3,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name="com.devom.app.DevomApp"
         android:icon="@mipmap/ic_launcher"
-        android:label="DevOm"
+        android:label="DevOm PanditJi"
         android:allowBackup="false"
         android:theme="@android:style/Theme.Material.NoActionBar">
         <activity
