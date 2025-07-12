@@ -29,6 +29,7 @@ import com.devom.app.ui.navigation.NavigationHost
 import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.providers.LoadingCompositionProvider
 import com.devom.network.NetworkClient
+import com.devom.utils.Application
 import com.devom.utils.Application.isLoggedIn
 import com.devom.utils.Application.loaderState
 import com.devom.utils.Application.loginState
@@ -67,6 +68,7 @@ internal fun App() = AppTheme {
             onLogOut = {
                 Logger.d("ON_LOGOUT") { "user has been logged out" }
                 isLoggedIn(false)
+                Application.hideLoader()
             }
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
