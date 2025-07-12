@@ -84,7 +84,8 @@ fun ColumnScope.BankAccountScreenContent(
                     keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
                 ), placeholder = stringResource(Res.string.Account_Number)
             ) {
-                bankAccount.accountNumber = it
+                val filtered = it.filter { it.isDigit() }
+                bankAccount.accountNumber = filtered
             }
         }
 

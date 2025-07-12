@@ -116,8 +116,11 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                     modifier = Modifier.size(24.dp)
                 )
             },
-            onValueChange = {
-                mobileNumber.value = it
+            onValueChange = { it ->
+                val filtered = it.filter { it.isDigit() }
+                if (filtered.length <= 10) {
+                    mobileNumber.value = filtered
+                }
             }
         )
 
