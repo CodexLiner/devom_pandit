@@ -111,7 +111,9 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
                     onDismiss = {
                         showSheet.value = false
                     },
-                    onOtpEntered = {}
+                    onOtpEntered = {
+                        viewModel.updatePoojaStatus(it , booking.value?.bookingId ?: 0 , type ="start")
+                    }
                 )
             }
         }

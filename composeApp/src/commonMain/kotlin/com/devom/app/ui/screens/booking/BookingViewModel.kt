@@ -8,6 +8,7 @@ import com.devom.models.poojaitems.GetPoojaItemsResponse
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.models.slots.RemoveAndUpdatePoojaItemRequest
 import com.devom.models.slots.UpdateBookingStatusInput
+import com.devom.models.slots.VerifyPoojaInput
 import com.devom.utils.Application
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.network.onResult
@@ -111,6 +112,23 @@ class BookingViewModel : ViewModel() {
                 it.onResult {
                     getBookingById(booking.bookingId.toString())
                     Application.showToast("Pooja removed successfully")
+                }
+            }
+        }
+    }
+
+    fun updatePoojaStatus(otp: String, id: Int, type: String) {
+        viewModelScope.launch {
+            Project.pandit.verifyPoojaUseCase.invoke(
+                input = VerifyPoojaInput(
+                    otp = otp,
+                    bookingId = id.toString(),
+                    type = type
+                )
+            ).collect {
+                it.onResult {
+                    getBookingById(id.toString())
+                    Application.showToast("Pooja status updated successfully")
                 }
             }
         }
