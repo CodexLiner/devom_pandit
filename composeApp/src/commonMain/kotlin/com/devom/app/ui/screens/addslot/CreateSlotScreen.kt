@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.app.models.RepeatOption
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.bgColor
 import com.devom.app.theme.inputColor
@@ -27,7 +28,9 @@ import com.devom.app.utils.dashedBorder
 import com.devom.app.utils.format
 import com.devom.app.utils.to12HourTime
 import com.devom.models.slots.Slot
+import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.formatIsoTo
+import com.devom.utils.date.toLocalDateTime
 import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
@@ -210,9 +213,15 @@ fun ColumnScope.SlotsSections(
                 slotsConfirmationSheet.value = false
             }
         ) { selectedSlots, selectedRepeatOption ->
+
+           val slots = when(selectedRepeatOption) {
+               RepeatOption.WEEKLY -> addWeeks(selectedSlots , 1)
+               RepeatOption.MONTHLY ->  addRemainingMonthsOfYear(selectedSlots)
+               null -> selectedSlots
+           }
             slotsConfirmationSheet.value = false
             sheetState.value = false
-            viewModel.createPanditSlot(selectedSlots)
+            viewModel.createPanditSlot(slots)
             temporarySelectedSlots.value = listOf()
         }
     }
@@ -227,4 +236,35 @@ fun HeaderContent(formattedMonthYear: String) {
     )
 
     Spacer(Modifier.height(12.dp))
+}
+
+fun addWeeks(
+    originalSlots: List<Slot>,
+    weeksToRepeat: Int
+): List<Slot> {
+    return originalSlots.flatMap { slot ->
+        val originalDate = LocalDate.parse(slot.availableDate)
+        (0..weeksToRepeat).map { i ->
+            val newDate = originalDate.plus(i, DateTimeUnit.WEEK)
+            slot.copy(availableDate = newDate.toString())
+        }
+    }
+}
+
+
+fun addRemainingMonthsOfYear(
+    originalSlots: List<Slot>
+): List<Slot> {
+    val currentYear = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year
+
+    return originalSlots.flatMap { slot ->
+        val originalDate = LocalDate.parse(slot.availableDate)
+        val monthDay = originalDate.dayOfMonth
+        (originalDate.monthNumber..12).mapNotNull { month ->
+            runCatching {
+                val newDate = LocalDate(currentYear, month, monthDay)
+                slot.copy(availableDate = newDate.toString())
+            }.getOrNull()
+        }
+    }
 }
