@@ -24,6 +24,7 @@ import pandijtapp.composeapp.generated.resources.ic_edit
 @Composable
 fun UserProfilePicture(
     mainModifier : Modifier = Modifier.fillMaxWidth(),
+    showEditIcon: Boolean = true,
     modifier: Modifier = Modifier
         .size(100.dp)
         .clip(CircleShape)
@@ -39,23 +40,24 @@ fun UserProfilePicture(
                 model = userResponse.profilePictureUrl.toDevomImage(),
                 modifier = modifier.clickable(onClick = onImageClick)
             )
-
-            Box(
-                modifier = Modifier
-                    .offset(x = (-4).dp, y = (-4).dp)
-                    .size(24.dp)
-                    .clip(CircleShape)
-                    .background(
-                        Color(0xFFFFC107)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(Res.drawable.ic_edit),
-                    contentDescription = "Edit",
-                    modifier = Modifier.size(14.dp),
-                    tint = Color.White
-                )
+            if (showEditIcon) {
+                Box(
+                    modifier = Modifier
+                        .offset(x = (-4).dp, y = (-4).dp)
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Color(0xFFFFC107)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(Res.drawable.ic_edit),
+                        contentDescription = "Edit",
+                        modifier = Modifier.size(14.dp),
+                        tint = Color.White
+                    )
+                }
             }
         }
     }

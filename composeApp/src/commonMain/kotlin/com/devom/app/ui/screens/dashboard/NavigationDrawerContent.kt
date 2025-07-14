@@ -144,6 +144,7 @@ fun UserDetailsContent(
 
         user?.let {
             UserProfilePicture(
+                showEditIcon = false,
                 mainModifier = Modifier.wrapContentWidth(),
                 modifier = Modifier.size(66.dp).clip(CircleShape),
                 userResponse = user
