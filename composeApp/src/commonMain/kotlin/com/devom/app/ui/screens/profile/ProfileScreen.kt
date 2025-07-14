@@ -48,7 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.devom.app.NOTIFICATION_PERMISSION_GRANTED
 import com.devom.app.models.ApplicationStatus
+import com.devom.app.settings
 import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greenColor
@@ -97,7 +99,13 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
+        notificationsEnabled = settings.getBoolean(NOTIFICATION_PERMISSION_GRANTED , false)
     }
+
+    LaunchedEffect(notificationsEnabled) {
+        settings.putBoolean(NOTIFICATION_PERMISSION_GRANTED , notificationsEnabled)
+    }
+
     LaunchedEffect(user) {
         availabilityEnabled = user.isOnline == 1
     }
