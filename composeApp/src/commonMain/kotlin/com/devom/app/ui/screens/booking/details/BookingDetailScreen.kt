@@ -57,6 +57,7 @@ import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
+import pandijtapp.composeapp.generated.resources.end_pooja
 import pandijtapp.composeapp.generated.resources.enter_pin_visible_on_customer_app
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_check
@@ -95,9 +96,8 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
                     ApplicationStatus.PENDING.status
                 )
             ) ButtonPrimary(
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
-                buttonText = stringResource(Res.string.start_pooja)
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 16.dp, vertical = 16.dp).height(58.dp),
+                buttonText = if (booking.value?.status == ApplicationStatus.STARTED.status) stringResource(Res.string.end_pooja) else stringResource(Res.string.start_pooja)
             ) {
                 showSheet.value = true
             }
@@ -112,7 +112,7 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
                         showSheet.value = false
                     },
                     onOtpEntered = {
-                        viewModel.updatePoojaStatus(it , booking.value?.bookingId ?: 0 , type ="start")
+                        viewModel.updatePoojaStatus(it , booking.value?.bookingId ?: 0 , type = if (booking.value?.status == ApplicationStatus.STARTED.status) "end" else "start")
                     }
                 )
             }
