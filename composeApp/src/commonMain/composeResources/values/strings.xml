@@ -64,7 +64,7 @@
     <string name="Confirmation_Time_Slots">Confirmation Time Slots</string>
     <string name="bonus_wallet">Bonus Wallet</string>
     <string name="referral_code">Referral Code (optional)</string>
-    <string name="enter_full_name">Enter full name*</string>
+    <string name="enter_full_name">Enter fullname*</string>
     <string name="enter_email">Enter email*</string>
     <string name="enter_phone">Enter phone*</string>
     <string name="enter_city">Select City*</string>
@@ -83,5 +83,6 @@
     <string name="view_and_track_your_payments_and_transactions">View and track your payments and transactions.</string>
     <string name="all_field_required">Please fill out all required fields.</string>
     <string name="referral_message">🔥 Signup on Devom using my referral code <b>%1$s</b> and we both get rewarded! 📲 Click the link to join now:\n</string>
+    <string name="search_contacts">Search Contacts</string>
 
 </resources>

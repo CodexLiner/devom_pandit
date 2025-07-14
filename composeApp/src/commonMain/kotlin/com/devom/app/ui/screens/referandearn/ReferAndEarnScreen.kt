@@ -2,6 +2,7 @@ package com.devom.app.ui.screens.referandearn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,19 +10,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,14 +41,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.app.ASSET_LINK_BASE_URL
+import com.devom.app.theme.backgroundColor
 import com.devom.app.theme.blackColor
 import com.devom.app.theme.greyColor
+import com.devom.app.theme.inputColor
 import com.devom.app.theme.primaryColor
 import com.devom.app.theme.text_style_h3
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.NoContentView
 import com.devom.app.ui.components.ShapedScreen
+import com.devom.app.ui.components.TextInputField
 import com.devom.models.auth.UserRequestResponse
 import com.devom.utils.Contact
 import com.devom.utils.share.ShareServiceProvider
@@ -55,6 +67,7 @@ import pandijtapp.composeapp.generated.resources.img_social_friends
 import pandijtapp.composeapp.generated.resources.invite
 import pandijtapp.composeapp.generated.resources.invite_friends
 import pandijtapp.composeapp.generated.resources.referral_message
+import pandijtapp.composeapp.generated.resources.search_contacts
 import pandijtapp.composeapp.generated.resources.share
 
 @Composable
@@ -91,8 +104,15 @@ fun ReferAndEarnScreenContent(user: State<UserRequestResponse?>, viewModel: Refe
 @Composable
 fun ReferMainContent(user: State<UserRequestResponse?>, viewModel: ReferAndEarnViewModel) {
     val contacts = viewModel.contacts.collectAsState()
-    Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    var isSearchVisible by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(24.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 text = stringResource(Res.string.invite_friends),
                 style = text_style_h3,
@@ -102,10 +122,29 @@ fun ReferMainContent(user: State<UserRequestResponse?>, viewModel: ReferAndEarnV
                 painter = painterResource(Res.drawable.ic_search),
                 contentDescription = null,
                 modifier = Modifier.padding(end = 6.dp).size(24.dp)
+                    .clickable { isSearchVisible = !isSearchVisible } // toggle on click
             )
         }
-        ReferContactList(user , contacts.value)
 
+        if (isSearchVisible) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Box(
+                modifier = Modifier.border(
+                    width = 1.dp,
+                    color = greyColor.copy(.24f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+            ) {
+                TextInputField(
+                    modifier = Modifier.padding(top = 4.dp),
+                    placeholder = stringResource(Res.string.search_contacts),
+                    backgroundColor = whiteColor
+                ) {
+                    searchText = it
+                }
+            }
+        }
+        ReferContactList(user, contacts.value.filter { it.name.contains(searchText, ignoreCase = true) })
     }
 }
 
