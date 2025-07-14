@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,14 +27,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
-import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -87,7 +83,6 @@ fun RitualsScreen(navController: NavController) {
     val viewModel = viewModel {
         RitualsViewModel()
     }
-    val poojaList = viewModel.rituals.collectAsState()
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
         AppBar(
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
@@ -112,6 +107,16 @@ fun ColumnScope.RitualsScreenScreenContent(
     val poojaList = viewModel.rituals.collectAsState()
     val poojaItemsList = viewModel.getPoojaItems.collectAsState()
     val showSheet = remember { mutableStateOf(false) }
+
+    val filtered by remember(poojaItemsList.value, poojaList.value) {
+        derivedStateOf {
+            poojaItemsList.value.filter { item ->
+                poojaList.value?.none { pooja -> pooja.poojaId == item.id } == true
+            }
+        }
+    }
+
+
     val selectedDropDownItem = remember { mutableStateOf<GetPanditPoojaResponse?>(null) }
 
     if (poojaList.value.isNullOrEmpty()) {
@@ -137,18 +142,21 @@ fun ColumnScope.RitualsScreenScreenContent(
             )
         }
     }
-    ButtonPrimary(
-        buttonText = "Add Pooja",
-        modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp)
-            .fillMaxWidth().height(58.dp),
-        onClick = {
-            showSheet.value = true
-        }
-    )
+
+    if (filtered.isNotEmpty()) {
+        ButtonPrimary(
+            buttonText = "Add Pooja",
+            modifier = Modifier.navigationBarsPadding().padding(start = 16.dp, end = 16.dp)
+                .fillMaxWidth().height(58.dp),
+            onClick = {
+                showSheet.value = true
+            }
+        )
+    }
 
     if (showSheet.value) {
         AddEditPoojaBottomSheet(
-            poojaList = poojaItemsList.value,
+            poojaList = filtered,
             poojaItem = selectedDropDownItem.value,
             title = "${if (selectedDropDownItem.value == null) "Add" else "Edit"} Pooja",
             showSheet = showSheet.value,
