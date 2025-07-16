@@ -128,8 +128,9 @@ fun ColumnScope.BankAccountScreenContent(
         onClick = {
             val isValid = bankAccount.isValid()
             if (isValid.first) {
-                viewModel.updateBankAccount(bankAccount)
-                navController.popBackStack()
+                viewModel.updateBankAccount(bankAccount) {
+                    navController.popBackStack()
+                }
             } else Application.showToast(isValid.second.orEmpty())
         }
     )

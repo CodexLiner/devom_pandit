@@ -12,6 +12,8 @@ const val NOTIFICATION_PERMISSION_GRANTED = "notificationPermissionGranted"
 
 const val REFRESH_TOKEN_KEY = "locallySavedRefreshTokenKey"
 const val UUID_KEY = "uuid"
+const val APPLICATION_ID = "applicationId"
+
 const val IMAGE_BASE_URL = "https://imageserver.devom.co.in/uploads/"
 const val DOCUMENT_BASE_URL = "https://imageserver.devom.co.in/uploads/documents/"
 const val BASE_URL = "https://devom-api-bold-smoke-8130.fly.dev"

@@ -72,6 +72,7 @@ internal fun App() = AppTheme {
             }
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
+                append(APPLICATION_ID , "com.devom.pandit")
             }
         }
         initialized = true
@@ -87,7 +88,9 @@ fun MainScreen(isLoggedIn: Boolean) {
     val navController = rememberNavController()
     LoadingCompositionProvider(state = loaderState.collectAsStateWithLifecycle().value) {
         AppContainer {
-            Scaffold(snackbarHost = { ShowSnackBar() }, content = {
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                snackbarHost = { ShowSnackBar() }, content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     AnimatedContent(
                         targetState = isLoggedIn, transitionSpec = {

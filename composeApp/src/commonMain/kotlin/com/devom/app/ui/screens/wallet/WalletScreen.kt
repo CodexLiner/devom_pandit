@@ -82,7 +82,7 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
     val bankDetails = viewModel.bankDetails.collectAsState()
     Box(modifier = Modifier.fillMaxWidth().background(primaryColor)) {
         WalletHeader(
-            balance.value.balance, if (bankDetails.value == null) stringResource(Res.string.Add_Account)
+            balance.value.balance, if (bankDetails.value?.accountNumber.isNullOrEmpty()) stringResource(Res.string.Add_Account)
             else stringResource(Res.string.Withdraw)
         ) {
             navController.navigate(Screens.BankAccountScreen.path)

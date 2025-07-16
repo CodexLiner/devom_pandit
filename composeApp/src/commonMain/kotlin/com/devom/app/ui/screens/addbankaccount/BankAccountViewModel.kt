@@ -20,11 +20,12 @@ class BankAccountViewModel : ViewModel() {
     }
 
 
-    fun updateBankAccount(details: UserBankDetails) {
+    fun updateBankAccount(details: UserBankDetails , onSuccess: () -> Unit) {
         viewModelScope.launch {
             Project.payment.addBankDetailsUseCase.invoke(details).collect {
                 it.onResultNothing {
                     _bankAccount.value = details
+                    onSuccess()
                     Application.showToast("Bank account updated successfully")
                 }
             }

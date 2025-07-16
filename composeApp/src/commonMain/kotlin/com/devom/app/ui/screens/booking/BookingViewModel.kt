@@ -12,6 +12,7 @@ import com.devom.models.slots.VerifyPoojaInput
 import com.devom.utils.Application
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.network.onResult
+import com.devom.utils.network.onResultNothing
 import com.devom.utils.network.withSuccess
 import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -127,6 +128,10 @@ class BookingViewModel : ViewModel() {
                 )
             ).collect {
                 it.onResult {
+                    getBookingById(id.toString())
+                    Application.showToast("Pooja status updated successfully")
+                }
+                it.onResultNothing {
                     getBookingById(id.toString())
                     Application.showToast("Pooja status updated successfully")
                 }
