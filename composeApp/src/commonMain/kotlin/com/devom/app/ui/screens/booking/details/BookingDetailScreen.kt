@@ -87,8 +87,8 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
             navigationIcon = painterResource(Res.drawable.ic_arrow_left),
             onNavigationIconClick = { navController.popBackStack() }
         )
-        booking.value?.let {
-            BookingDetailScreenContent(navController, it, viewModel)
+        booking.value?.let { it ->
+            BookingDetailScreenContent(it, viewModel)
             if (booking.value?.status !in listOf(
                     ApplicationStatus.COMPLETED.status,
                     ApplicationStatus.REJECTED.status,
@@ -122,7 +122,6 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
 
 @Composable
 fun ColumnScope.BookingDetailScreenContent(
-    navController: NavController,
     booking: GetBookingsResponse,
     viewModel: BookingViewModel,
 ) {
