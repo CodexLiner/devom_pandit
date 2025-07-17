@@ -60,7 +60,7 @@ fun BookingCard(
             onError = {
                 co.touchlab.kermit.Logger.d("KermitLogger $it")
             },
-            model = booking.userImage.toDevomImage(),
+            model = booking.poojaImage.toDevomImage(),
             modifier = Modifier.size(112.dp, 139.dp).clip(RoundedCornerShape(12.dp)),
         )
         Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
