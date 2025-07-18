@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +59,11 @@ import pandijtapp.composeapp.generated.resources.view_and_track_your_payments_an
 import pandijtapp.composeapp.generated.resources.withdrawals
 
 @Composable
-fun WalletScreen(navHostController: NavHostController, onNavigationIconClick: () -> Unit) {
+fun WalletScreen(
+    navHostController: NavHostController,
+    onUpdate: () -> Unit = {},
+    onNavigationIconClick: () -> Unit,
+) {
     val viewModel: WalletViewModel = viewModel {
         WalletViewModel()
     }
@@ -69,6 +74,15 @@ fun WalletScreen(navHostController: NavHostController, onNavigationIconClick: ()
         )
         WalletScreenContent(navHostController, viewModel)
     }
+
+    LaunchedEffect(Unit) {
+        viewModel.getWalletBalance()
+        onUpdate()
+    }
+    LaunchedEffect(viewModel.walletBalances.collectAsState().value) {
+        onUpdate()
+    }
+
 }
 
 @Composable
@@ -82,7 +96,8 @@ fun WalletDetailsContent(navController: NavHostController, viewModel: WalletView
     val bankDetails = viewModel.bankDetails.collectAsState()
     Box(modifier = Modifier.fillMaxWidth().background(primaryColor)) {
         WalletHeader(
-            balance.value.balance, if (bankDetails.value?.accountNumber.isNullOrEmpty()) stringResource(Res.string.Add_Account)
+            balance.value.balance,
+            if (bankDetails.value?.accountNumber.isNullOrEmpty()) stringResource(Res.string.Add_Account)
             else stringResource(Res.string.Withdraw)
         ) {
             navController.navigate(Screens.BankAccountScreen.path)
@@ -130,7 +145,7 @@ private fun WalletHeader(
                 color = whiteColor,
                 shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             )
-            .padding(start = 16.dp , top = 16.dp , bottom = 16.dp)
+            .padding(start = 16.dp, top = 16.dp, bottom = 16.dp)
     ) {
         WalletIcon()
         WalletBalanceInfo(balance)
@@ -158,7 +173,8 @@ private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
             fontWeight = FontWeight.W400,
             fontSize = 14.sp
         )
-        val currentBalance =(balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.bonusWallet.toFloatOrNull() ?: 0f)
+        val currentBalance =
+            (balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.bonusWallet.toFloatOrNull() ?: 0f)
 
         Text(
             text = "₹${currentBalance}",
@@ -177,7 +193,8 @@ private fun WithdrawButton(
         onClick = onClick,
         content = {
             Text(
-                modifier = Modifier.background(blackColor, RoundedCornerShape(12.dp)).padding(vertical = 10.dp, horizontal = 8.dp),
+                modifier = Modifier.background(blackColor, RoundedCornerShape(12.dp))
+                    .padding(vertical = 10.dp, horizontal = 8.dp),
                 text = buttonText,
                 color = whiteColor,
                 style = text_style_lead_text,

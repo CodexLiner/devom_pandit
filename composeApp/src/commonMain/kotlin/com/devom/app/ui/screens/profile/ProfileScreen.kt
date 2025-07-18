@@ -86,6 +86,7 @@ import pandijtapp.composeapp.generated.resources.update_profile
 @Composable
 fun ProfileScreen(
     navHostController: NavHostController,
+    onUpdate : () -> Unit = {},
     onNavigationIconClick: () -> Unit = {},
 ) {
     val viewModel = viewModel<ProfileViewModel> {
@@ -99,6 +100,7 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getUserProfile()
+        onUpdate()
         notificationsEnabled = settings.getBoolean(NOTIFICATION_PERMISSION_GRANTED , false)
     }
 
@@ -108,6 +110,7 @@ fun ProfileScreen(
 
     LaunchedEffect(user) {
         availabilityEnabled = user.isOnline == 1
+        onUpdate()
     }
 
     Column(
