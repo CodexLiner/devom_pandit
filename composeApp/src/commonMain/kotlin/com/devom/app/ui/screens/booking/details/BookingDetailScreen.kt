@@ -66,6 +66,7 @@ import pandijtapp.composeapp.generated.resources.pooja_samgri_list
 import pandijtapp.composeapp.generated.resources.select_pooja_item
 import pandijtapp.composeapp.generated.resources.start_pooja
 import pandijtapp.composeapp.generated.resources.submit
+import pandijtapp.composeapp.generated.resources.verification_pooja_end
 import pandijtapp.composeapp.generated.resources.verification_pooja_start
 
 @Composable
@@ -105,7 +106,7 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
             if (showSheet.value) {
                 StartEndPoojaSheet(
                     showSheet = showSheet.value,
-                    title = stringResource(Res.string.verification_pooja_start),
+                    title = stringResource(if (booking.value?.status == ApplicationStatus.STARTED.status) Res.string.verification_pooja_end else Res.string.verification_pooja_start),
                     message = stringResource(Res.string.enter_pin_visible_on_customer_app),
                     buttonText = stringResource(Res.string.submit),
                     onDismiss = {
