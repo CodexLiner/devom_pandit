@@ -103,8 +103,9 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
             val todayBookings = bookings.value.filter {
                 it.bookingDate.convertIsoToDate()?.toLocalDateTime(TimeZone.currentSystemDefault())?.date == today
             }
+
             if (todayBookings.isNotEmpty()) {
-                items(todayBookings.take(5)) { booking ->
+                items(todayBookings.take(6)) { booking ->
                     BookingCard(
                         booking = booking,
                         onBookingUpdate = {
