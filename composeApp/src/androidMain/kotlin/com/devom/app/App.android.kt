@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import com.devom.app.firebase.FirebaseAuthenticationManager
 import com.russhwolf.settings.set
 import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
@@ -21,6 +22,7 @@ class AppActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { App() }
+        FirebaseAuthenticationManager.init(this)
         requestMissingPermissions()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         FileKit.init(this)
