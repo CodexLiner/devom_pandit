@@ -162,7 +162,7 @@ fun BookingUserContactDetail(booking: GetBookingsResponse) {
             color = greyColor,
         )
 
-        if (booking.status == ApplicationStatus.COMPLETED.status) Text(
+        if (booking.status.lowercase() == ApplicationStatus.COMPLETED.status.lowercase()) Text(
             modifier = Modifier,
             text = "₹${booking.totalAmount}",
             fontSize = 14.sp,
