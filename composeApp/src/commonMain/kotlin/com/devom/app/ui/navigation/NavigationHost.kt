@@ -145,14 +145,20 @@ fun NavigationHost(
         composable(Screens.BankAccountScreen.path) {
             BankAccountScreen(navController = navController)
         }
+
         composable(
-            route = Screens.PoojaStartEndScreen.path.plus("/{booking}"),
-            arguments = listOf(navArgument("booking") { type = NavType.StringType })
+            route = Screens.PoojaStartEndScreen.path.plus("/{booking}/{otp}"),
+            arguments = listOf(
+                navArgument("booking") { type = NavType.StringType },
+                navArgument("otp") { type = NavType.StringType }
+            )
         ) {
             val booking = it.arguments?.getString("booking")?.decodeFromString<GetBookingsResponse>()
+            val otp = it.arguments?.getString("otp")
             PoojaStartEndScreen(
                 navHostController = navController,
-                booking = booking
+                booking = booking,
+                otp =otp
             )
         }
     }

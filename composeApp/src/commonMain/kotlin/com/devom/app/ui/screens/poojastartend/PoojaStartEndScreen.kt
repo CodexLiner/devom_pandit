@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.app.theme.bgColor
 import com.devom.app.theme.greyColor
@@ -33,6 +34,7 @@ import com.devom.app.theme.text_style_h5
 import com.devom.app.theme.text_style_lead_text
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.navigation.Screens
+import com.devom.app.ui.screens.booking.BookingViewModel
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -52,7 +54,13 @@ import pandijtapp.composeapp.generated.resources.paid_online_note
 import pandijtapp.composeapp.generated.resources.payment_received
 
 @Composable
-fun PoojaStartEndScreen(navHostController: NavHostController, booking: GetBookingsResponse?) {
+fun PoojaStartEndScreen(
+    navHostController: NavHostController,
+    booking: GetBookingsResponse?,
+    otp: String?,
+) {
+    val viewModel: BookingViewModel = viewModel { BookingViewModel() }
+
     val isPaid = booking?.isPaid == 1
 
     val titleText =
@@ -144,12 +152,17 @@ fun PoojaStartEndScreen(navHostController: NavHostController, booking: GetBookin
             )
 
             ButtonPrimary(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 buttonText = actionButtonText,
                 onClick = {
-                    navHostController.popBackStack(Screens.Dashboard.path, false)
+                    viewModel.updatePoojaStatus(
+                        otp =otp.orEmpty(),
+                        id = booking?.bookingId ?: 0,
+                        type = "end",
+                        onResult = {
+                            navHostController.navigateUp()
+                        }
+                    )
                 },
                 fontStyle = text_style_lead_text
             )

@@ -13,6 +13,7 @@ import com.devom.utils.Application
 import com.devom.utils.cachepolicy.CachePolicy
 import com.devom.utils.network.onResult
 import com.devom.utils.network.onResultNothing
+import com.devom.utils.network.withError
 import com.devom.utils.network.withSuccess
 import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -118,7 +119,7 @@ class BookingViewModel : ViewModel() {
         }
     }
 
-    fun updatePoojaStatus(otp: String, id: Int, type: String) {
+    fun updatePoojaStatus(otp: String, id: Int, type: String , onResult : () -> Unit = {} ) {
         viewModelScope.launch {
             Project.pandit.verifyPoojaUseCase.invoke(
                 input = VerifyPoojaInput(
@@ -130,10 +131,15 @@ class BookingViewModel : ViewModel() {
                 it.onResult {
                     getBookingById(id.toString())
                     Application.showToast("Pooja status updated successfully")
+                    onResult()
                 }
                 it.onResultNothing {
                     getBookingById(id.toString())
                     Application.showToast("Pooja status updated successfully")
+                    onResult()
+                }
+                it.withError {
+                    onResult()
                 }
             }
         }

@@ -48,10 +48,12 @@ import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.AppBar
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DropDownItem
+import com.devom.app.ui.navigation.Screens
 import com.devom.app.ui.screens.booking.BookingViewModel
 import com.devom.app.ui.screens.booking.components.BookingCard
 import com.devom.app.ui.screens.booking.components.SelectPoojaItemBottomSheet
 import com.devom.app.ui.screens.booking.components.StartEndPoojaSheet
+import com.devom.app.utils.toJsonString
 import com.devom.models.slots.BookingItem
 import com.devom.models.slots.GetBookingsResponse
 import org.jetbrains.compose.resources.painterResource
@@ -113,7 +115,13 @@ fun BookingDetailScreen(navController: NavController, bookingId: String?) {
                         showSheet.value = false
                     },
                     onOtpEntered = {
-                        viewModel.updatePoojaStatus(it , booking.value?.bookingId ?: 0 , type = if (booking.value?.status == ApplicationStatus.STARTED.status) "end" else "start")
+                        if (booking.value?.status == ApplicationStatus.STARTED.status) {
+                            navController.navigate("${Screens.PoojaStartEndScreen.path}/${booking.value.toJsonString()}/${it}")
+                        } else viewModel.updatePoojaStatus(
+                            it,
+                            booking.value?.bookingId ?: 0,
+                            type = "start"
+                        )
                     }
                 )
             }
