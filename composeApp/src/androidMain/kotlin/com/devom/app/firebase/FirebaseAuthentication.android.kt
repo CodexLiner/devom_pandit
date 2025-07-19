@@ -9,6 +9,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.devom.models.auth.GoogleSignInRequest
+import com.devom.utils.Application
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.CoroutineScope
@@ -73,8 +74,10 @@ object FirebaseAuthenticationManager {
                 }
             } catch (e: NoCredentialException) {
                 Log.w("GoogleSignIn", "No credentials found", e)
+                Application.hideLoader()
             } catch (e: GetCredentialException) {
                 Log.e("GoogleSignIn", "Error getting credential", e)
+                Application.hideLoader()
             }
         }
     }
@@ -83,11 +86,12 @@ object FirebaseAuthenticationManager {
         return GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setAutoSelectEnabled(false)
-            .setServerClientId("1084106475388-q05rpt3a8s78nqdubjorbiref5b5mv29.apps.googleusercontent.com")
+            .setServerClientId("1084106475388-4qua1ph7t8ppfh78eg5hrmvall96dine.apps.googleusercontent.com")
             .build()
     }
 }
 
 actual fun initiateGoogleSignIn(onSignInSuccess: (GoogleSignInRequest) -> Unit) {
+    Application.showLoader()
     FirebaseAuthenticationManager.initiateGoogleSignIn(onSignInSuccess)
 }
