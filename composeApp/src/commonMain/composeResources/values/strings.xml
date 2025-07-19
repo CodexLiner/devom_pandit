@@ -28,7 +28,6 @@
     <string name="earnings">Earnings</string>
     <string name="withdrawals">Withdrawals</string>
     <string name="bonus_added">Bonus Added</string>
-    <string name="payment_received">Payment Received</string>
     <string name="no_transactions_found">No Transactions Found</string>
     <string name="copy">Copy</string>
     <string name="share">SHARE</string>
@@ -85,5 +84,17 @@
     <string name="all_field_required">Please fill out all required fields.</string>
     <string name="referral_message">🔥 Signup on Devom using my referral code <b>%1$s</b> and we both get rewarded! 📲 Click the link to join now:\n</string>
     <string name="search_contacts">Search Contacts</string>
+    <string name="payment_received">Payment Received</string>
+    <string name="paid_online_note">This booking was paid online by the customer.</string>
+    <string name="amount_paid">Amount Paid:</string>
+    <string name="no_payment_required">No further payment collection is required.</string>
+    <string name="finish_booking">Finish Booking</string>
+    <string name="collect_finish_booking">Cash Collected &amp; Finish</string>
+    <string name="collect_payment">Collect Payment from Customer</string>
+    <string name="collect_payment_note">Please collect the full amount from the customer before finishing the booking.</string>
+    <string name="amount_to_collect">Amount to Collect:</string>
+    <string name="cash_payment_required">This booking requires cash payment.</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>

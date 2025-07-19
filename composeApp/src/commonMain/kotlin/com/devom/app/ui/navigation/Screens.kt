@@ -1,5 +1,8 @@
 package com.devom.app.ui.navigation
 
+import com.devom.models.slots.GetBookingsResponse
+import kotlinx.serialization.Serializable
+
 /**
  * Sealed class representing the different screens in the application.
  * Each screen is defined as a data object inheriting from this class.
@@ -33,6 +36,7 @@ sealed class Screens(val path: String) {
     data object TransactionsDetails : Screens(path = "transactions_details")
     data object HelpAndSupportDetailScreen : Screens(path = "help_and_support_detail_screen")
     data object BankAccountScreen : Screens(path = "bank_account_screen")
+    data object PoojaStartEndScreen : Screens(path = "pooja_end_start_screen")
 
 
 }

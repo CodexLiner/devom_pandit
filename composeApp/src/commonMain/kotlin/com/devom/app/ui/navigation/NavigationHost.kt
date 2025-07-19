@@ -26,6 +26,7 @@ import com.devom.app.ui.screens.helpandsupport.HelpAndSupportScreen
 import com.devom.app.ui.screens.login.LoginScreen
 import com.devom.app.ui.screens.notification.NotificationScreen
 import com.devom.app.ui.screens.otpscreen.VerifyOtpScreen
+import com.devom.app.ui.screens.poojastartend.PoojaStartEndScreen
 import com.devom.app.ui.screens.profile.EditProfileScreen
 import com.devom.app.ui.screens.referandearn.ReferAndEarnScreen
 import com.devom.app.ui.screens.reviews.ReviewsAndRatingsScreen
@@ -35,6 +36,8 @@ import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
 import com.devom.app.ui.screens.transactions.TransactionDetailsScreen
 import com.devom.app.ui.screens.transactions.TransactionsScreen
+import com.devom.app.utils.decodeFromString
+import com.devom.models.slots.GetBookingsResponse
 
 @Composable
 fun NavigationHost(
@@ -141,6 +144,16 @@ fun NavigationHost(
         }
         composable(Screens.BankAccountScreen.path) {
             BankAccountScreen(navController = navController)
+        }
+        composable(
+            route = Screens.PoojaStartEndScreen.path.plus("/{booking}"),
+            arguments = listOf(navArgument("booking") { type = NavType.StringType })
+        ) {
+            val booking = it.arguments?.getString("booking")?.decodeFromString<GetBookingsResponse>()
+            PoojaStartEndScreen(
+                navHostController = navController,
+                booking = booking
+            )
         }
     }
 }

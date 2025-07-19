@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import com.devom.app.DOCUMENT_BASE_URL
 import com.devom.app.IMAGE_BASE_URL
 import com.devom.models.slots.Slot
+import com.devom.network.NetworkClient
 import io.ktor.http.encodeURLPath
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
@@ -93,4 +94,9 @@ fun String.formatStatus(): String =
 val videoExtensions = listOf("mp4", "mov", "avi", "mkv", "webm", "flv", "wmv", "3gp", "mpeg")
 
 
-
+inline fun <reified T> T.toJsonString(): String {
+    return NetworkClient.config.jsonConfig.encodeToString(this)
+}
+inline fun <reified T> String.decodeFromString(): T {
+    return NetworkClient.config.jsonConfig.decodeFromString(this)
+}
