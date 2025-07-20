@@ -70,60 +70,55 @@ fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () 
 fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHostController) {
     val bookings = viewModel.bookings.collectAsState()
     val transactions = viewModel.transactions.collectAsState()
-    if (bookings.value.isEmpty()) NoContentView(
-        message = "No Bookings Found",
-        title = null,
-        image = null
-    ) else
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                end = 16.dp,
-                top = 16.dp,
-                bottom = 200.dp
-            ),
-            modifier = Modifier.fillMaxSize().animateContentSize()
-        ) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+            bottom = 200.dp
+        ),
+        modifier = Modifier.fillMaxSize().animateContentSize()
+    ) {
 
-            item {
-                EarningsBarChart(transactions = transactions.value.transactions)
-            }
+        item {
+            EarningsBarChart(transactions = transactions.value.transactions)
+        }
 
-            item {
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = "Today's Bookings",
-                    style = text_style_h5,
-                    color = blackColor
+        item {
+            Text(
+                modifier = Modifier.padding(top = 12.dp),
+                text = "Today's Bookings",
+                style = text_style_h5,
+                color = blackColor
+            )
+        }
+        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        val todayBookings = bookings.value.filter {
+            it.bookingDate.convertIsoToDate()?.toLocalDateTime(TimeZone.currentSystemDefault())?.date == today
+        }
+
+        if (todayBookings.isNotEmpty()) {
+            items(todayBookings.take(6)) { booking ->
+                BookingCard(
+                    booking = booking,
+                    onBookingUpdate = {
+                        viewModel.updateBookingStatus(booking.bookingId, it)
+                    }, onClick = {
+                        navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
+                    }
                 )
             }
-            val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-            val todayBookings = bookings.value.filter {
-                it.bookingDate.convertIsoToDate()?.toLocalDateTime(TimeZone.currentSystemDefault())?.date == today
-            }
-
-            if (todayBookings.isNotEmpty()) {
-                items(todayBookings.take(6)) { booking ->
-                    BookingCard(
-                        booking = booking,
-                        onBookingUpdate = {
-                            viewModel.updateBookingStatus(booking.bookingId, it)
-                        }, onClick = {
-                            navHostController.navigate(Screens.BookingDetails.path + "/${booking.bookingId}")
-                        }
-                    )
-                }
-            } else item {
-                Box(modifier = Modifier.fillMaxSize().background(whiteColor , RoundedCornerShape(12.dp)).height(278.dp)) {
-                    NoContentView(
-                        titleTextStyle = text_style_h4,
-                        title = "No Bookings Available",
-                        message = "You haven’t made any bookings yet. Once you do, they’ll appear here.",
-                        image = null
-                    )
-                }
+        } else item {
+            Box(modifier = Modifier.fillMaxSize().background(whiteColor , RoundedCornerShape(12.dp)).height(278.dp)) {
+                NoContentView(
+                    titleTextStyle = text_style_h4,
+                    title = "No Bookings Available",
+                    message = "You haven’t made any bookings yet. Once you do, they’ll appear here.",
+                    image = null
+                )
             }
         }
+    }
 }
