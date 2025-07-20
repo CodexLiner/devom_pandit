@@ -18,25 +18,18 @@ import io.github.vinceglb.filekit.FileKit
 import io.github.vinceglb.filekit.dialogs.init
 
 class AppActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { App() }
         FirebaseAuthenticationManager.init(this)
-        requestMissingPermissions()
+        requestNotificationPermission()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         FileKit.init(this)
     }
 
-    private val notificationPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            settings[NOTIFICATION_PERMISSION_GRANTED] = isGranted
-        }
-
-    private val contactsPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted -> }
-
-    private fun requestMissingPermissions() {
+    private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
                     this, Manifest.permission.POST_NOTIFICATIONS
@@ -45,9 +38,14 @@ class AppActivity : ComponentActivity() {
                 notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             } else {
                 println("Notification permission already granted")
+                requestContactsPermission()
             }
+        } else {
+            requestContactsPermission()
         }
+    }
 
+    private fun requestContactsPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CONTACTS
             ) != PackageManager.PERMISSION_GRANTED
@@ -57,6 +55,17 @@ class AppActivity : ComponentActivity() {
             println("Contacts permission already granted")
         }
     }
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            settings[NOTIFICATION_PERMISSION_GRANTED] = isGranted
+            requestContactsPermission() // Request contacts after notification result
+        }
+
+    private val contactsPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            // Handle contacts permission result if needed
+        }
 }
 
 @Preview
