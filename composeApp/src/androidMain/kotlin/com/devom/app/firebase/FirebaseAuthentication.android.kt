@@ -86,7 +86,7 @@ object FirebaseAuthenticationManager {
         return GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
             .setAutoSelectEnabled(false)
-            .setServerClientId("1084106475388-4qua1ph7t8ppfh78eg5hrmvall96dine.apps.googleusercontent.com")
+            .setServerClientId("1084106475388-q05rpt3a8s78nqdubjorbiref5b5mv29.apps.googleusercontent.com")
             .build()
     }
 }
