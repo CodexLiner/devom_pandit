@@ -92,21 +92,10 @@ fun MainScreen(isLoggedIn: Boolean) {
                 modifier = Modifier.fillMaxSize(),
                 snackbarHost = { ShowSnackBar() }, content = {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    AnimatedContent(
-                        targetState = isLoggedIn, transitionSpec = {
-                            fadeIn(animationSpec = tween(500)) togetherWith  fadeOut(
-                                animationSpec = tween(
-                                    500
-                                )
-                            )
-                        }, label = "Auth/Dashboard Transition"
-                    ) { target ->
-                        NavigationHost(
-                            navController = navController,
-                            startDestination = if (target) Screens.Dashboard.path else Screens.Login.path
-                        )
-                    }
-
+                    NavigationHost(
+                        navController = navController,
+                        startDestination = if (isLoggedIn) Screens.Dashboard.path else Screens.Login.path
+                    )
                     ProgressLoader()
                 }
             })
