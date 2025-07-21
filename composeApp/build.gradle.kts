@@ -62,6 +62,8 @@ kotlin {
             implementation(libs.filekit.coil)
             implementation("network.chaintech:cmpcharts:1.0.0")
             implementation("com.devom:platform:alpha.1.0.0")
+            implementation("com.apollographql.apollo:apollo-runtime:4.3.1")
+
         }
 
         commonTest.dependencies {

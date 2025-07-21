@@ -20,7 +20,10 @@ fun String.toColor(): Color {
 }
 
 fun String?.toDevomImage(): String? {
-    val encodedPath = this?.encodeURLPath()
+    if (this.isNullOrBlank()) return null
+    if (this.contains("https://", ignoreCase = true)) return this
+
+    val encodedPath = this.encodeURLPath()
     return IMAGE_BASE_URL + encodedPath
 }
 

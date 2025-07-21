@@ -148,6 +148,19 @@ fun ColumnScope.BookingDetailScreenContent(
         }
 
         item {
+            MetaInfo("Urgent Booking" , booking.isUrgent == 1)
+        }
+
+        item {
+            MetaInfo("Prepaid Booking" , booking.isPaid == 1)
+        }
+
+        item {
+            MetaInfo("With Samagri" , booking.isWithItem == 1)
+        }
+
+
+        item {
             BookingSamagriHeader(booking, viewModel)
         }
 
@@ -249,6 +262,7 @@ fun SamagriCheckbox(
     borderColor: Color = primaryColor,
     checkmarkColor: Color = primaryColor,
     size: Dp = 20.dp,
+    isChecked: Boolean = true,
     cornerRadius: Dp = 4.dp,
     onClick: () -> Unit = {},
 ) {
@@ -259,13 +273,31 @@ fun SamagriCheckbox(
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            painter = painterResource(Res.drawable.ic_check),
-            contentDescription = null,
-            tint = checkmarkColor,
-            modifier = Modifier.size(size * 0.6f)
-        )
+        if (isChecked) {
+            Icon(
+                painter = painterResource(Res.drawable.ic_check),
+                contentDescription = null,
+                tint = checkmarkColor,
+                modifier = Modifier.size(size * 0.6f)
+            )
+        }
     }
 }
 
+@Composable
+fun MetaInfo(title : String , isChecked: Boolean = false) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 28.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            color = textBlackShade,
+            fontWeight = FontWeight.W600,
+            fontSize = 14.sp,
+        )
+        SamagriCheckbox(isChecked = isChecked)
+    }
+}
 
