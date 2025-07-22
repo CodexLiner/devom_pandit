@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.devom.app.models.RepeatOption
 import com.devom.app.theme.greyColor
@@ -42,6 +43,7 @@ import com.devom.app.theme.text_style_h3
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.whiteColor
 import com.devom.app.ui.components.ButtonPrimary
+import com.devom.app.ui.screens.booking.details.SamagriCheckbox
 import com.devom.app.utils.to24HourTime
 import com.devom.models.slots.Slot
 import kotlinx.coroutines.launch
@@ -185,7 +187,8 @@ fun TimeSlotConfirmationBottomSheet(
                 val isChecked = selectedOption == option
 
                 Row(
-                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -193,13 +196,9 @@ fun TimeSlotConfirmationBottomSheet(
                         }
                         .padding(vertical = 8.dp)
                 ) {
-                    Checkbox(
-                        colors = CheckboxDefaults.colors().copy(
-                            checkedBoxColor = primaryColor,
-                            uncheckedBoxColor = Color.Transparent
-                        ),
-                        checked = isChecked,
-                        onCheckedChange = {
+                    SamagriCheckbox(
+                        isChecked = isChecked,
+                        onClick = {
                             selectedOption = if (isChecked) null else option
                         }
                     )
