@@ -1,11 +1,6 @@
 package com.devom.app
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
@@ -47,7 +42,7 @@ internal fun App() = AppTheme {
     val isLoggedIn by loginState.collectAsState()
     var initialized by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isLoggedIn){
+    LaunchedEffect(isLoggedIn) {
         if (isLoggedIn.not()) {
             settings.remove(ACCESS_TOKEN_KEY)
             settings.remove(ACCESS_TOKEN_KEY)
@@ -60,7 +55,8 @@ internal fun App() = AppTheme {
     }
 
     LaunchedEffect(isLoggedIn) {
-        val loggedIn = accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true
+        val loggedIn =
+            accessKey?.isNotEmpty() == true && refreshToken?.isNotEmpty() == true && uuid?.isNotEmpty() == true
         isLoggedIn(loggedIn)
         NetworkClient.configure {
             setTokens(access = accessKey.orEmpty(), refresh = refreshToken.orEmpty())
@@ -72,7 +68,7 @@ internal fun App() = AppTheme {
             }
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
-                append(APPLICATION_ID , "com.devom.pandit")
+                append(APPLICATION_ID, "com.devom.pandit")
             }
         }
         initialized = true
@@ -91,18 +87,18 @@ fun MainScreen(isLoggedIn: Boolean) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 snackbarHost = { ShowSnackBar() }, content = {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    NavigationHost(
-                        navController = navController,
-                        startDestination = if (isLoggedIn) Screens.Dashboard.path else Screens.Login.path
-                    )
-                    ProgressLoader()
-                }
-            })
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        NavigationHost(
+                            navController = navController,
+                            startDestination = if (isLoggedIn) Screens.Dashboard.path else Screens.Login.path
+                        )
+                        ProgressLoader()
+                    }
+                })
         }
     }
     LaunchedEffect(Unit) {
-        MyFirebaseMessagingService.getToken { token , _ ->
+        MyFirebaseMessagingService.getToken { token, _ ->
             Logger.d("FIREBASE_ACCESS_TOKEN :- $token")
         }
     }
