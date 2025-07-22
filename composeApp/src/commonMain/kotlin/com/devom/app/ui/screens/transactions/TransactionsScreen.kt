@@ -84,7 +84,7 @@ fun TransactionsScreenContent(
     var selectedTabIndex = remember { mutableStateOf(0) }
 
     val filteredTransaction = when(selectedTabIndex.value) {
-        0 -> transactions.value.transactions.filter { it.type != TransactionType.CREDIT.status }
+        0 -> transactions.value.transactions.filter { it.type == TransactionType.CREDIT.status }
         1 -> transactions.value.transactions.filter { it.type == TransactionType.DEBIT.status }
         else -> transactions.value.transactions
     }
