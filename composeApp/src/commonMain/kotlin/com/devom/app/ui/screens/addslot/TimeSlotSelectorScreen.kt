@@ -336,7 +336,7 @@ fun AddTimeSlotButton(
     val localTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
     TextButton(onClick = {
-        val currentStartTime = "06:00 AM"
+        val currentStartTime = "6:00 AM"
         val defaultSlotDuration = 2
         val timeZone = TimeZone.currentSystemDefault()
         val maxEndTime = localTime.date.atTime(23, 59)
@@ -352,7 +352,7 @@ fun AddTimeSlotButton(
         }
 
         if (timeSlots.isEmpty()) {
-            onAdd(mutableListOf(Slot(startTime = currentStartTime, endTime = "2:00 AM")))
+            onAdd(mutableListOf(Slot(startTime = currentStartTime, endTime = "8:00 AM")))
             return@TextButton
         }
 
