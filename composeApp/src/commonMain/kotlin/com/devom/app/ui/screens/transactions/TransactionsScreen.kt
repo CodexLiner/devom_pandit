@@ -71,13 +71,12 @@ fun TransactionsScreen(navController: NavController) {
             title = stringResource(Res.string.my_transactions),
             onNavigationIconClick = { navController.popBackStack() }
         )
-        TransactionsScreenContent(navController, viewModel)
+        TransactionsScreenContent(viewModel)
     }
 }
 
 @Composable
 fun TransactionsScreenContent(
-    navController: NavController,
     viewModel: TransactionsScreenViewModel,
 ) {
     val transactions = viewModel.transactions.collectAsState()
@@ -85,8 +84,8 @@ fun TransactionsScreenContent(
     var selectedTabIndex = remember { mutableStateOf(0) }
 
     val filteredTransaction = when(selectedTabIndex.value) {
-        0 -> transactions.value.transactions.filter { it.purpose != TransactionType.WITHDRAWAL.status }
-        1 -> transactions.value.transactions.filter { it.purpose == TransactionType.WITHDRAWAL.status }
+        0 -> transactions.value.transactions.filter { it.type != TransactionType.CREDIT.status }
+        1 -> transactions.value.transactions.filter { it.type == TransactionType.DEBIT.status }
         else -> transactions.value.transactions
     }
 
