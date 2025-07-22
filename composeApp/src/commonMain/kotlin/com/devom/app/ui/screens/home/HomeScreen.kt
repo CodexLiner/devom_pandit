@@ -81,7 +81,7 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
         modifier = Modifier.fillMaxSize().animateContentSize()
     ) {
 
-        item {
+        item(transactions.value.transactions) {
             EarningsBarChart(transactions = transactions.value.transactions)
         }
 

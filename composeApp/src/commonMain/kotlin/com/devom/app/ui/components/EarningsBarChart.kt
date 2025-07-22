@@ -139,7 +139,7 @@ fun DisplayCurrentYearChart(
     val months = monthlySums.map { it.first }
     val values = monthlySums.map { it.second }
     val sum = remember { values.sum() }
-    LaunchedEffect(Unit , values) {
+    LaunchedEffect(Unit , values , transactions) {
         onSum(sum)
     }
     Box(
@@ -162,7 +162,7 @@ fun DisplayCurrentWeekChart(
     val weeks = dailySums.map { it.first }
     val values = dailySums.map { it.second }
     val sum = remember { values.sum() }
-    LaunchedEffect(Unit , values) {
+    LaunchedEffect(Unit , values , transactions) {
         onSum(sum)
     }
     Box(
