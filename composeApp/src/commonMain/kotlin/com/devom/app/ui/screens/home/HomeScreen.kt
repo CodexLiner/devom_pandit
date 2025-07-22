@@ -49,6 +49,7 @@ fun HomeScreen(navHostController: NavHostController , onNavigationIconClick: () 
     }
     LaunchedEffect(Unit) {
         viewModel.getBookings()
+        viewModel.getTransactions()
     }
     Column(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
         AppBar(title = "Dashboard", onNavigationIconClick = onNavigationIconClick , actions = {
