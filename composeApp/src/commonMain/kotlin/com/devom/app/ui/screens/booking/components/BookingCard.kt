@@ -39,6 +39,7 @@ import com.devom.app.utils.toDevomImage
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toLocalDateTime
+import com.devom.utils.maskPhoneNumber
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -146,7 +147,7 @@ private fun RowScope.ConfirmationIcon(
 @Composable
 fun BookingUserContactDetail(booking: GetBookingsResponse) {
     Text(
-        text = booking.mobileNo,
+        text = if (booking.isPaid == 1) booking.mobileNo.maskPhoneNumber() else booking.mobileNo,
         fontWeight = FontWeight.W500,
         fontSize = 12.sp,
         lineHeight = 18.sp,
