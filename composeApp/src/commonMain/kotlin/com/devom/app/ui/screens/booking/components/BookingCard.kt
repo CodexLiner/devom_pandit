@@ -38,6 +38,7 @@ import com.devom.app.utils.to12HourTime
 import com.devom.app.utils.toDevomImage
 import com.devom.models.slots.GetBookingsResponse
 import com.devom.utils.date.convertIsoToDate
+import com.devom.utils.date.convertToAmPm
 import com.devom.utils.date.toLocalDateTime
 import com.devom.utils.maskPhoneNumber
 import org.jetbrains.compose.resources.DrawableResource
@@ -203,7 +204,7 @@ fun BookingPoojaDetails(booking: GetBookingsResponse) {
             )
 
             val date =  booking.bookingDate.convertIsoToDate()?.toLocalDateTime()?.date.toString()
-            val time = booking.bookingDate.convertIsoToDate()?.toLocalDateTime()?.time?.to12HourTime()
+            val time = booking.startTime.convertToAmPm()
             Text(
                 text = date.plus(" $time"),
                 fontWeight = FontWeight.W500,

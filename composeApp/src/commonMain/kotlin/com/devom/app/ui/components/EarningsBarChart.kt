@@ -41,6 +41,7 @@ import com.devom.app.theme.textStyleBody2
 import com.devom.app.theme.text_style_h4
 import com.devom.app.theme.text_style_lead_body_1
 import com.devom.app.theme.whiteColor
+import com.devom.models.payment.TransactionType
 import com.devom.models.payment.WalletTransaction
 import com.devom.utils.date.convertIsoToDate
 import com.devom.utils.date.toLocalDateTime
@@ -113,11 +114,11 @@ fun EarningsBarChart(
             }
         }
         when (selectedOption) {
-            "Week" -> DisplayCurrentWeekChart(transactions, timeZone) {
+            "Week" -> DisplayCurrentWeekChart(transactions.filter { it.type == TransactionType.CREDIT.status }, timeZone) {
                 totalEarning.value = it.toString()
             }
 
-            "Year" -> DisplayCurrentYearChart(transactions, timeZone) {
+            "Year" -> DisplayCurrentYearChart(transactions.filter { it.type == TransactionType.CREDIT.status }, timeZone) {
                 totalEarning.value = it.toString()
             }
         }
