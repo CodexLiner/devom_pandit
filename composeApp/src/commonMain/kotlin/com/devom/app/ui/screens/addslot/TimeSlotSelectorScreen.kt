@@ -58,6 +58,7 @@ import com.devom.app.utils.updateSlotTimeAndShiftFollowingSlots
 import com.devom.models.slots.Slot
 import com.devom.utils.Application
 import com.devom.utils.date.convertIsoToDate
+import com.devom.utils.date.toAmPm
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -141,14 +142,32 @@ fun TimeSlotSelectorScreen(
 
             ButtonPrimary(
                 buttonText = "Confirm & Save",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp).height(58.dp),
-                enabled = dateSlotMap.values.any { it.isNotEmpty() }) {
-                val allSlots = dateSlotMap.flatMap { (date, slots) ->
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .height(58.dp),
+                enabled = dateSlotMap.values.any { it.isNotEmpty() }
+            ) {
+                val timeZone = TimeZone.currentSystemDefault()
+
+                val newSlots = dateSlotMap.flatMap { (date, slots) ->
                     slots.map { slot ->
                         slot.copy(availableDate = date.toString())
                     }
                 }
-                onSlotSelected(allSlots)
+
+                val normalizedInitialSlots = initialSelectedSlots.mapNotNull { slot ->
+                    slot.availableDate.convertIsoToDate()
+                        ?.toLocalDateTime(timeZone)
+                        ?.date
+                        ?.let { normalizedDate ->
+                            slot.copy(availableDate = normalizedDate.toString() , startTime = LocalTime.parse(slot.startTime).toAmPm() , endTime =   LocalTime.parse(slot.endTime).toAmPm())
+                        }
+                }
+                val mergedSlots = (normalizedInitialSlots + newSlots)
+                    .distinctBy { it.availableDate + it.startTime + it.endTime }
+
+                onSlotSelected(mergedSlots)
             }
         }
     }

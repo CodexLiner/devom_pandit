@@ -1,18 +1,14 @@
 package com.devom.app.utils
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.LocalTime.Companion
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.datetime.toLocalTime
-import kotlin.time.ExperimentalTime
 
 fun LocalTime.to12HourTime(): String {
     val hour = if (this.hour % 12 == 0) 12 else this.hour % 12
