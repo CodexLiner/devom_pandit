@@ -194,9 +194,9 @@ fun BookingPoojaDetails(booking: GetBookingsResponse) {
                 color = greyColor
             )
         }
-        Column(modifier = Modifier.weight(1f)) {
+        Column(modifier = Modifier.padding(end = 16.dp)) {
             Text(
-                "DATE & TIME",
+                "TIME",
                 fontWeight = FontWeight.W600,
                 fontSize = 12.sp,
                 style = text_style_lead_text,
@@ -206,7 +206,7 @@ fun BookingPoojaDetails(booking: GetBookingsResponse) {
             val date =  booking.bookingDate.convertIsoToDate()?.toLocalDateTime()?.date.toString()
             val time = booking.startTime.convertToAmPm()
             Text(
-                text = date.plus(" $time"),
+                text = time,
                 fontWeight = FontWeight.W500,
                 fontSize = 12.sp,
                 lineHeight = 18.sp,

@@ -28,6 +28,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class LoginViewModel : ViewModel() {
+    init {
+        Project.other.clearCacheUseCase.invoke()
+    }
 
     /**
      * send otp on the entered mobile number
@@ -62,7 +65,7 @@ class LoginViewModel : ViewModel() {
                         }
                         addHeaders {
                             append(UUID_KEY, it.data.uuid)
-                            append(APPLICATION_ID , "com.devom.pandit")
+                            append(APPLICATION_ID, "com.devom.pandit")
                         }
                     }
                     MyFirebaseMessagingService.getToken { token, device ->
