@@ -6,6 +6,7 @@ import co.touchlab.kermit.Logger
 import com.devom.Project
 import com.devom.app.ACCESS_TOKEN_KEY
 import com.devom.app.APPLICATION_ID
+import com.devom.app.AuthManager
 import com.devom.app.BASE_URL
 import com.devom.app.REFRESH_TOKEN_KEY
 import com.devom.app.UUID_KEY
@@ -55,23 +56,11 @@ class LoginViewModel : ViewModel() {
                     settings[REFRESH_TOKEN_KEY] = result.data.refreshToken
                     settings[UUID_KEY] = result.data.uuid
                     settings[USER] = NetworkClient.config.jsonConfig.encodeToString(result.data)
-                    NetworkClient.configure {
-                        setTokens(access = it.data.accessToken, refresh = it.data.refreshToken)
-                        baseUrl = BASE_URL
-                        onLogOut = {
-                            Logger.d("ON_LOGOUT") { "user has been logged out" }
-                            isLoggedIn(false)
-                            Application.hideLoader()
-                        }
-                        addHeaders {
-                            append(UUID_KEY, it.data.uuid)
-                            append(APPLICATION_ID, "com.devom.pandit")
-                        }
-                    }
-                    MyFirebaseMessagingService.getToken { token, device ->
-                        saveDeviceToken(token, device)
-                    }
-                    isLoggedIn(true)
+                    AuthManager.login(
+                        accessToken = result.data.accessToken,
+                        refreshToken = result.data.refreshToken,
+                        uuid = result.data.uuid
+                    )
                 }
             }
         }
