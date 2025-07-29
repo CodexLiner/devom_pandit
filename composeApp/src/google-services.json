@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1084106475388-9s4rjqrmhr80r00pjd03t8hq5c94sedp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devom.app",
+            "certificate_hash": "bd51c744b49bfc9ea0be4c13d7365390df529882"
+          }
+        },
+        {
           "client_id": "1084106475388-q05rpt3a8s78nqdubjorbiref5b5mv29.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -36,12 +44,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084106475388:android:b069007f452570ebae06f9",
+        "mobilesdk_app_id": "1:1084106475388:android:23640978aa91c793ae06f9",
         "android_client_info": {
-          "package_name": "com.devom.pandit.app"
+          "package_name": "com.devom.pandit"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1084106475388-ci2nlq6ikhfs5422ha77m6k8tpf7160p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.devom.pandit",
+            "certificate_hash": "566be2e70e38e47efbb880ac01971de2761770e2"
+          }
+        },
         {
           "client_id": "1084106475388-q05rpt3a8s78nqdubjorbiref5b5mv29.apps.googleusercontent.com",
           "client_type": 3

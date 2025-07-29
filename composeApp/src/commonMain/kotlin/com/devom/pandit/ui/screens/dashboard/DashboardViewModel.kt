@@ -1,0 +1,67 @@
+package com.devom.pandit.ui.screens.dashboard
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.devom.Project
+import com.devom.pandit.firebase.MyFirebaseMessagingService
+import com.devom.models.auth.SaveUserDeviceTokenRequest
+import com.devom.models.auth.UserRequestResponse
+import com.devom.models.payment.GetWalletBalanceResponse
+import com.devom.utils.network.onResult
+import com.devom.utils.network.withSuccess
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+
+class DashboardViewModel : ViewModel() {
+    private val _walletBalances = MutableStateFlow(GetWalletBalanceResponse())
+    val walletBalances = _walletBalances
+
+    private val _user = MutableStateFlow(UserRequestResponse())
+    val user = _user
+
+    private var _selectedTab = MutableStateFlow(0)
+    var selectedTab = _selectedTab
+    fun onTabSelected(index: Int) {
+        _selectedTab.value = index
+    }
+
+    init {
+        getWalletBalance()
+        getUserProfile()
+        MyFirebaseMessagingService.getToken { token, device ->
+            saveDeviceToken(token, device)
+        }
+    }
+
+    fun getWalletBalance() {
+        viewModelScope.launch {
+            Project.payment.getWalletBalanceUseCase.invoke().collect {
+                it.withSuccess {
+                    _walletBalances.value = it.data
+                }
+            }
+        }
+    }
+
+    fun getUserProfile() {
+        viewModelScope.launch {
+            Project.user.getUserProfileUseCase.invoke().collect {
+                it.onResult {
+                    _user.value = it.data
+                }
+            }
+        }
+    }
+
+    fun saveDeviceToken(token: String = "", device: String) {
+        viewModelScope.launch {
+            Project.user.saveDeviceTokenUseCase.invoke(
+                SaveUserDeviceTokenRequest(
+                    deviceToken = token,
+                    deviceType = device
+                )
+            ).collect()
+        }
+    }
+}
