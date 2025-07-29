@@ -20,7 +20,7 @@ class DevomApp : Application() {
             val name = "General Notifications"
             val descriptionText = "Includes all general notifications"
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel("devom_app_channel", name, importance).apply {
+            val channel = NotificationChannel("devom_pandit_app_channel", name, importance).apply {
                 description = descriptionText
             }
             val notificationManager: NotificationManager =
