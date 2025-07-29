@@ -99,67 +99,6 @@ fun TimeSlotBottomSheet(
 fun TimeSlotConfirmationBottomSheet(
     selectedSlots: List<Slot> = listOf(),
     showSheet: Boolean,
-    initialSelectedDate: LocalDate,
-    onDismiss: () -> Unit,
-    onSlotSelected: (List<Slot>) -> Unit,
-) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-    val options = listOf(
-        "Save this slot for the same time upcoming week",
-        "Save this slot for the same time upcoming month"
-    )
-    var selectedOption by remember { mutableStateOf<String?>(null) }
-
-    if (showSheet) {
-        ModalBottomSheet(
-            onDismissRequest = {
-                scope.launch {
-                    sheetState.hide()
-                    onDismiss()
-                }
-            },
-            sheetState = sheetState
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Repeat this slot", style = MaterialTheme.typography.titleMedium)
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                options.forEach { option ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedOption = option }
-                            .padding(vertical = 8.dp)
-                    ) {
-                        RadioButton(
-                            selected = selectedOption == option,
-                            onClick = { selectedOption = option }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(option)
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {
-
-                    onDismiss()
-                }, modifier = Modifier.align(Alignment.End)) {
-                    Text("Confirm")
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimeSlotConfirmationBottomSheet(
-    selectedSlots: List<Slot> = listOf(),
-    showSheet: Boolean,
     onDismiss: () -> Unit,
     onSlotSelected: (List<Slot>, selectedRepeatOption: RepeatOption?) -> Unit,
 ) {
