@@ -36,6 +36,7 @@ import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
 import com.devom.app.ui.screens.transactions.TransactionDetailsScreen
 import com.devom.app.ui.screens.transactions.TransactionsScreen
+import com.devom.app.ui.screens.webview.WebView
 import com.devom.app.ui.screens.withdraw.WithdrawBalanceScreen
 import com.devom.app.utils.decodeFromString
 import com.devom.models.slots.GetBookingsResponse
@@ -166,6 +167,13 @@ fun NavigationHost(
                 booking = booking,
                 otp = otp
             )
+        }
+
+        composable(
+            route = Screens.WebView.path.plus("/{url}"),
+            arguments = listOf(navArgument("url") { type = NavType.StringType })
+        ) {
+            WebView(url = it.arguments?.getString("url").orEmpty())
         }
     }
 }
