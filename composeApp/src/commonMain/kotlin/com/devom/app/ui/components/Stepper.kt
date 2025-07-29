@@ -1,5 +1,4 @@
 package com.devom.app.ui.components
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,9 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -81,18 +77,18 @@ fun StepItem(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            when {
-                isCompleted -> Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "Completed",
-                    tint = Color.White,
-                    modifier = Modifier.size(14.dp)
-                )
-
-                isCurrent -> Canvas(modifier = Modifier.size(6.dp)) {
-                    drawCircle(color = Color.Black)
-                }
-            }
+//            when {
+//                isCompleted -> Icon(
+//                    imageVector = Icons.Default.Check,
+//                    contentDescription = "Completed",
+//                    tint = Color.White,
+//                    modifier = Modifier.size(14.dp)
+//                )
+//
+//                isCurrent -> Canvas(modifier = Modifier.size(6.dp)) {
+//                    drawCircle(color = Color.Black)
+//                }
+//            }
         }
 
         Spacer(modifier = Modifier.height(4.dp))

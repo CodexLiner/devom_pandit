@@ -94,15 +94,22 @@ fun WalletScreenContent(navHostController: NavHostController, viewModel: WalletV
 fun WalletDetailsContent(navController: NavHostController, viewModel: WalletViewModel) {
     val balance = viewModel.walletBalances.collectAsState()
     val bankDetails = viewModel.bankDetails.collectAsState()
-    Box(modifier = Modifier.fillMaxWidth().background(primaryColor)) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .background(primaryColor)
+    ) {
+        val hasBankAccount = !bankDetails.value?.accountNumber.isNullOrEmpty()
+        val buttonText = stringResource(if (hasBankAccount) Res.string.Withdraw else Res.string.Add_Account)
+        val destination = if (hasBankAccount) Screens.WithdrawBalanceScreen.path else Screens.BankAccountScreen.path
+
         WalletHeader(
             balance.value.balance,
-            if (bankDetails.value?.accountNumber.isNullOrEmpty()) stringResource(Res.string.Add_Account)
-            else stringResource(Res.string.Withdraw)
+            buttonText
         ) {
-            navController.navigate(Screens.BankAccountScreen.path)
+            navController.navigate(destination)
         }
     }
+
     WalletBreakdownRow(balance.value.balance)
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
@@ -154,7 +161,7 @@ private fun WalletHeader(
 }
 
 @Composable
-private fun WalletIcon() {
+fun WalletIcon() {
     Image(
         painter = painterResource(Res.drawable.ic_nav_wallet),
         contentDescription = null,
@@ -165,7 +172,7 @@ private fun WalletIcon() {
 }
 
 @Composable
-private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
+fun RowScope.WalletBalanceInfo(balance: WalletBalance? = null) {
     Column(modifier = Modifier.weight(1f)) {
         Text(
             text = stringResource(Res.string.current_balance),
@@ -173,14 +180,17 @@ private fun RowScope.WalletBalanceInfo(balance: WalletBalance) {
             fontWeight = FontWeight.W400,
             fontSize = 14.sp
         )
-        val currentBalance =
-            (balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.bonusWallet.toFloatOrNull() ?: 0f)
+        balance?.let {
+            val currentBalance =
+                (balance.cashWallet.toFloatOrNull() ?: 0f) + (balance.bonusWallet.toFloatOrNull()
+                    ?: 0f)
 
-        Text(
-            text = "₹${currentBalance}",
-            color = blackColor,
-            style = text_style_h4
-        )
+            Text(
+                text = "₹${currentBalance}",
+                color = blackColor,
+                style = text_style_h4
+            )
+        }
     }
 }
 

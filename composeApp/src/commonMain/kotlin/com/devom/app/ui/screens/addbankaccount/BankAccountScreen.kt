@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +16,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -24,10 +29,14 @@ import androidx.navigation.NavController
 import com.devom.app.models.SupportedFiles
 import com.devom.app.theme.backgroundColor
 import com.devom.app.ui.components.AppBar
+import com.devom.app.ui.components.AsyncImage
 import com.devom.app.ui.components.ButtonPrimary
 import com.devom.app.ui.components.DocumentPicker
 import com.devom.app.ui.components.TextInputField
+import com.devom.app.utils.toDevomDocument
+import com.devom.app.utils.toDevomImage
 import com.devom.utils.Application
+import io.github.vinceglb.filekit.path
 import io.github.vinceglb.filekit.source
 import kotlinx.io.buffered
 import kotlinx.io.readByteArray
@@ -63,6 +72,9 @@ fun ColumnScope.BankAccountScreenContent(
     viewModel: BankAccountViewModel,
 ) {
     val bankAccount by viewModel.bankAccount.collectAsState()
+    var passBookUrl by remember(bankAccount) {
+        mutableStateOf(bankAccount.passBookImage.toDevomImage())
+    }
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
         modifier = Modifier.fillMaxWidth().weight(1f),
@@ -112,11 +124,23 @@ fun ColumnScope.BankAccountScreenContent(
 
         item {
             DocumentPicker(
+                addIconOnly = passBookUrl.orEmpty().isNotEmpty(),
                 modifier = Modifier.padding(vertical = 8.dp),
                 allowedDocs = listOf(SupportedFiles.IMAGE),
                 title = "Select Bank Proof"
             ) { file, type ->
+                passBookUrl = file.path
                 bankAccount.file = file.source().buffered().readByteArray()
+            }
+        }
+
+        item {
+            if (passBookUrl?.isNotEmpty() == true) {
+                AsyncImage(
+                    contentScale = ContentScale.Crop,
+                    model = passBookUrl.orEmpty(),
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 
@@ -124,11 +148,11 @@ fun ColumnScope.BankAccountScreenContent(
     ButtonPrimary(
         buttonText = stringResource(Res.string.Update),
         modifier = Modifier.navigationBarsPadding()
-            .padding(top = 48.dp, start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
+            .padding(start = 16.dp, end = 16.dp).fillMaxWidth().height(58.dp),
         onClick = {
             val isValid = bankAccount.isValid()
             if (isValid.first) {
-                viewModel.updateBankAccount(bankAccount) {
+                viewModel.updateBankAccount(bankAccount.copy()) {
                     navController.popBackStack()
                 }
             } else Application.showToast(isValid.second.orEmpty())

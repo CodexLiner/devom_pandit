@@ -36,6 +36,7 @@ import com.devom.app.ui.screens.signup.RegisterMainScreen
 import com.devom.app.ui.screens.signup.SignupSuccessScreen
 import com.devom.app.ui.screens.transactions.TransactionDetailsScreen
 import com.devom.app.ui.screens.transactions.TransactionsScreen
+import com.devom.app.ui.screens.withdraw.WithdrawBalanceScreen
 import com.devom.app.utils.decodeFromString
 import com.devom.models.slots.GetBookingsResponse
 
@@ -146,6 +147,10 @@ fun NavigationHost(
             BankAccountScreen(navController = navController)
         }
 
+        composable(Screens.WithdrawBalanceScreen.path) {
+            WithdrawBalanceScreen(navController)
+        }
+
         composable(
             route = Screens.PoojaStartEndScreen.path.plus("/{booking}/{otp}"),
             arguments = listOf(
@@ -153,12 +158,13 @@ fun NavigationHost(
                 navArgument("otp") { type = NavType.StringType }
             )
         ) {
-            val booking = it.arguments?.getString("booking")?.decodeFromString<GetBookingsResponse>()
+            val booking =
+                it.arguments?.getString("booking")?.decodeFromString<GetBookingsResponse>()
             val otp = it.arguments?.getString("otp")
             PoojaStartEndScreen(
                 navHostController = navController,
                 booking = booking,
-                otp =otp
+                otp = otp
             )
         }
     }

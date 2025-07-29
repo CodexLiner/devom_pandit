@@ -6,7 +6,11 @@ import com.devom.Project
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
 import com.devom.models.payment.UserBankDetails
+import com.devom.models.payment.WithdrawInput
+import com.devom.network.getUser
+import com.devom.utils.Application
 import com.devom.utils.network.onResult
+import com.devom.utils.network.onResultNothing
 import com.devom.utils.network.withSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,6 +46,20 @@ class WalletViewModel : ViewModel() {
             Project.payment.getBankDetailsUseCase.invoke().collect {
                 it.onResult {
                     _bankDetails.value = it.data
+                }
+            }
+        }
+    }
+
+    fun withdrawMoney(enteredAmount: Int , onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            Project.payment.withdrawMoneyUseCase.invoke(
+                WithdrawInput(userId = getUser().userId, amount = enteredAmount)
+            ).collect {
+                it.onResult {
+                    getWalletBalance()
+                    onSuccess()
+                    Application.showToast("Money Withdraw Successfully")
                 }
             }
         }

@@ -37,6 +37,7 @@ sealed class Screens(val path: String) {
     data object HelpAndSupportDetailScreen : Screens(path = "help_and_support_detail_screen")
     data object BankAccountScreen : Screens(path = "bank_account_screen")
     data object PoojaStartEndScreen : Screens(path = "pooja_end_start_screen")
+    data object WithdrawBalanceScreen : Screens(path = "withdraw_balance_screen")
 
 
 }
