@@ -14,6 +14,7 @@ import com.devom.pandit.settings
 import com.devom.utils.Application.showToast
 import com.devom.utils.network.ResponseResult
 import com.devom.utils.network.onResult
+import com.devom.utils.network.withError
 import com.russhwolf.settings.set
 import kotlinx.coroutines.launch
 
@@ -37,6 +38,9 @@ class RegisterViewModel : ViewModel() {
                         refreshToken = result.data.refreshToken,
                         uuid = result.data.uuid
                     )
+                }
+                result.withError {
+                    showToast("Please enter a valid OTP code")
                 }
             }
         }
