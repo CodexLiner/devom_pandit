@@ -93,10 +93,10 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
                 color = blackColor
             )
         }
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val today = Clock.System.now().toLocalDateTime()
 
         val todayBookings = bookings.value.filter {
-            it.bookingDate.convertIsoToDate()?.toLocalDateTime(TimeZone.currentSystemDefault())?.date == today
+            it.bookingDate.convertIsoToDate()?.toLocalDateTime()?.date == today
         }
 
         if (todayBookings.isNotEmpty()) {
