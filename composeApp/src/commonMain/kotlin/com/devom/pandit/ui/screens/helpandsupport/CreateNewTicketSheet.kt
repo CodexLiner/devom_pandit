@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.devom.models.helpandsupport.CreateTicketRequest
 import com.devom.pandit.models.SupportedFiles
 import com.devom.pandit.theme.blackColor
 import com.devom.pandit.theme.text_style_h3
@@ -24,7 +25,6 @@ import com.devom.pandit.theme.whiteColor
 import com.devom.pandit.ui.components.ButtonPrimary
 import com.devom.pandit.ui.components.DocumentPicker
 import com.devom.pandit.ui.components.TextInputField
-import com.devom.models.helpandsupport.CreateTicketRequest
 import io.github.vinceglb.filekit.name
 import io.github.vinceglb.filekit.source
 import kotlinx.coroutines.launch
@@ -33,6 +33,7 @@ import kotlinx.io.readByteArray
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.all_field_required
+import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +75,7 @@ fun CreateNewTicketSheet(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun CreateNewTicketSheetContent(
     errorState: MutableState<Boolean>,
@@ -101,7 +103,7 @@ fun CreateNewTicketSheetContent(
             message = "Upload your file here",
             allowedDocs = listOf(SupportedFiles.IMAGE)
         ) { file, _ ->
-            createTicketInput.value = createTicketInput.value.copy(image = file.source().buffered().readByteArray())
+            createTicketInput.value = createTicketInput.value.copy(image = file.source().buffered().readByteArray() , fileName = file.name)
             selectedFile.value = file.name
             errorState.value = false
         }
