@@ -26,8 +26,12 @@ import com.devom.utils.Application
 import com.devom.utils.Application.loaderState
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 val settings = Settings()
 
@@ -87,10 +91,10 @@ object AuthManager {
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
 
     val accessToken: String?
-        get() = settings.get(ACCESS_TOKEN_KEY)
+        get() = settings[ACCESS_TOKEN_KEY]
 
     val refreshToken: String?
-        get() = settings.get(REFRESH_TOKEN_KEY)
+        get() = settings[REFRESH_TOKEN_KEY]
 
     val uuid: String?
         get() = settings.get(UUID_KEY)
@@ -113,6 +117,10 @@ object AuthManager {
         _isLoggedIn.value = false
         Project.other.clearCacheUseCase.invoke()
         Application.hideLoader()
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(2000)
+            Application.hideLoader()
+        }
     }
 
     private fun configureNetwork() {

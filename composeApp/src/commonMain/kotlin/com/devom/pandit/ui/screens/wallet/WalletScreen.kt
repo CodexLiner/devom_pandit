@@ -75,6 +75,7 @@ fun WalletScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getWalletBalance()
+        viewModel.getBankDetails()
         onUpdate()
     }
     LaunchedEffect(viewModel.walletBalances.collectAsState().value) {

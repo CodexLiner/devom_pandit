@@ -66,6 +66,7 @@ import com.devom.pandit.ui.navigation.Screens
 import com.devom.pandit.utils.toColor
 import com.devom.pandit.utils.toDevomImage
 import com.devom.models.auth.UserRequestResponse
+import network.chaintech.cmpcharts.common.extensions.formatToSinglePrecision
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Availability
@@ -299,7 +300,7 @@ private fun RatingsBar(rating: Float) {
         Spacer(modifier = Modifier.width(4.dp))
 
         Text(
-            text = "(${rating}/5)", color = blackColor, style = text_style_lead_text
+            text = "(${rating.formatToSinglePrecision()}/5)", color = blackColor, style = text_style_lead_text
         )
     }
 }

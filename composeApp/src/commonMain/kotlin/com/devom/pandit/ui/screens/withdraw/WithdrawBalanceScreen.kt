@@ -179,6 +179,7 @@ fun ColumnScope.BankWalletScreenContent(
             val enteredAmount = amount.toIntOrNull()
             if (enteredAmount != null && enteredAmount > 0) {
                 viewModel.withdrawMoney(enteredAmount) {
+                    Application.showToast("Withdrawal of Rs $enteredAmount completed successfully.")
                     navController.navigateUp()
                 }
             } else {

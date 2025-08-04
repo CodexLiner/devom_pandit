@@ -102,7 +102,6 @@ fun ColumnScope.EditProfileScreenContent(viewModel: ProfileViewModel, user: User
 
 @Composable
 fun EditProfileFormContent(userResponse: UserRequestResponse, viewModel: ProfileViewModel) {
-    val datePickerState = remember { mutableStateOf(false) }
     val imagePickerState = remember { mutableStateOf(false) }
 
     var createUserRequest by remember {
@@ -140,25 +139,5 @@ fun EditProfileFormContent(userResponse: UserRequestResponse, viewModel: Profile
             viewModel.updateUserProfile(createUserRequest, image)
             imagePickerState.value = false
         }
-    )
-}
-
-@Composable
-fun showDatePicker(
-    state: MutableState<Boolean>,
-    viewModel: ProfileViewModel,
-    userRequestResponse: UserRequestResponse,
-) {
-
-    DatePickerDialog(
-        maxDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
-        onDismiss = { state.value = false },
-        onDateSelected = {
-            state.value = false
-            val updatedUser = userRequestResponse.copy(dateOfBirth = it.toIsoDateTimeString())
-            viewModel.setUserResponse(updatedUser)
-        },
-        showPicker = state.value,
-        selectedDate = userRequestResponse.dateOfBirth.convertIsoToDate()?.toLocalDateTime()?.date,
     )
 }
