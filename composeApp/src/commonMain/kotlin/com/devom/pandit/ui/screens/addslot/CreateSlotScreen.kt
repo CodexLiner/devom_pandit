@@ -1,21 +1,42 @@
 package com.devom.pandit.ui.screens.addslot
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.devom.models.slots.Slot
 import com.devom.pandit.models.RepeatOption
 import com.devom.pandit.theme.backgroundColor
 import com.devom.pandit.theme.bgColor
@@ -27,12 +48,15 @@ import com.devom.pandit.ui.components.NoContentView
 import com.devom.pandit.utils.dashedBorder
 import com.devom.pandit.utils.format
 import com.devom.pandit.utils.to12HourTime
-import com.devom.models.slots.Slot
 import com.devom.utils.date.formatIsoTo
 import com.devom.utils.date.toLocalDateTime
 import com.devom.utils.date.yyyy_MM_DD
 import kotlinx.coroutines.launch
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -214,13 +238,13 @@ fun ColumnScope.SlotsSections(
         ) { selectedSlots, selectedRepeatOption ->
 
            val slots = when(selectedRepeatOption) {
-               RepeatOption.WEEKLY -> addWeeks(selectedSlots , 1)
+               RepeatOption.WEEKLY -> addWeeks(selectedSlots , 1 , selectedDate)
                RepeatOption.MONTHLY ->  addRemainingMonthsOfYear(selectedSlots)
                null -> selectedSlots
            }
             slotsConfirmationSheet.value = false
             sheetState.value = false
-            viewModel.createPanditSlot(slots)
+            viewModel.createPanditSlot(slots.distinctBy { it.availableDate })
             temporarySelectedSlots.value = listOf()
         }
     }
@@ -239,16 +263,27 @@ fun HeaderContent(formattedMonthYear: String) {
 
 fun addWeeks(
     originalSlots: List<Slot>,
-    weeksToRepeat: Int
+    weeksToRepeat: Int,
+    selectedDate: LocalDate
 ): List<Slot> {
+    val startOfWeek = selectedDate
+    val endOfWeek = selectedDate.plus(6, DateTimeUnit.DAY)
+
     return originalSlots.flatMap { slot ->
         val originalDate = LocalDate.parse(slot.availableDate)
-        (0..weeksToRepeat).map { i ->
-            val newDate = originalDate.plus(i, DateTimeUnit.WEEK)
-            slot.copy(availableDate = newDate.toString())
+        val repeatedSlots = mutableListOf(slot)
+
+        if (originalDate in startOfWeek..endOfWeek) {
+            for (i in 1..weeksToRepeat) {
+                val repeatedDate = originalDate.plus(i * 7, DateTimeUnit.DAY)
+                repeatedSlots.add(slot.copy(availableDate = repeatedDate.toString()))
+            }
         }
+
+        repeatedSlots
     }
 }
+
 
 
 fun addRemainingMonthsOfYear(
