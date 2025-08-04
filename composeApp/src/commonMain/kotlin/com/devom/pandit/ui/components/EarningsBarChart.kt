@@ -114,14 +114,25 @@ fun EarningsBarChart(
             }
         }
         when (selectedOption) {
-            "Week" -> DisplayCurrentWeekChart(transactions.filter { it.type == TransactionType.CREDIT.status }, timeZone) {
-                totalEarning.value = it.toString()
+            "Week" -> {
+                val filtered = transactions.filter {
+                    it.type == TransactionType.CREDIT.status || it.type == TransactionType.REFUND.status
+                }
+                DisplayCurrentWeekChart(filtered, timeZone) {
+                    totalEarning.value = it.toString()
+                }
             }
 
-            "Year" -> DisplayCurrentYearChart(transactions.filter { it.type == TransactionType.CREDIT.status }, timeZone) {
-                totalEarning.value = it.toString()
+            "Year" -> {
+                val filtered = transactions.filter {
+                    it.type == TransactionType.CREDIT.status || it.type == TransactionType.REFUND.status
+                }
+                DisplayCurrentYearChart(filtered, timeZone) {
+                    totalEarning.value = it.toString()
+                }
             }
         }
+
     }
 
 }
@@ -286,10 +297,15 @@ fun filterCurrentYear(
 fun sumByMonth(transactions: List<WalletTransaction>, currentYear: Int): List<Pair<String, Int>> {
     return (1..12).map { month ->
         val sum = transactions.filter {
-            it.createdAt.convertIsoToDate()
-                ?.toLocalDateTime()?.month?.number == month && it.createdAt.convertIsoToDate()
-                ?.toLocalDateTime()?.year == currentYear
-        }.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toInt()
+            val date = it.createdAt.convertIsoToDate()?.toLocalDateTime()
+            date?.month?.number == month && date.year == currentYear
+        }.sumOf {
+            when (it.type) {
+                TransactionType.CREDIT.status -> it.amount.toDoubleOrNull() ?: 0.0
+                TransactionType.REFUND.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
+                else -> 0.0
+            }
+        }.toInt()
         val label = monthNames[month - 1]
         label to sum
     }
@@ -308,10 +324,16 @@ fun sumByDay(
     startOfWeek: LocalDate,
 ): List<Pair<String, Int>> {
     return (0..6).map { offset ->
-        val day = startOfWeek.plus(offset.toLong(), DateTimeUnit.DAY) // e.g. Monday
-        val sum =
-            transactions.filter { it.createdAt.convertIsoToDate()?.toLocalDateTime()?.date == day }
-                .sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toInt()
+        val day = startOfWeek.plus(offset.toLong(), DateTimeUnit.DAY)
+        val sum = transactions.filter {
+            it.createdAt.convertIsoToDate()?.toLocalDateTime()?.date == day
+        }.sumOf {
+            when (it.type) {
+                TransactionType.CREDIT.status -> it.amount.toDoubleOrNull() ?: 0.0
+                TransactionType.REFUND.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
+                else -> 0.0
+            }
+        }.toInt()
 
         day.dayOfWeek.toString().take(3) to sum
     }
