@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +38,9 @@ import com.devom.pandit.theme.textBlackShade
 import com.devom.pandit.ui.components.AppBar
 import com.devom.pandit.ui.components.NoContentView
 import com.devom.models.notification.GetNotificationResponse
+import com.devom.pandit.UNREAD_NOTIFICATION
+import com.devom.pandit.settings
+import com.russhwolf.settings.set
 import org.jetbrains.compose.resources.painterResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
@@ -55,6 +59,9 @@ fun NotificationScreen(navHostController: NavHostController) {
             onNavigationIconClick = { navHostController.popBackStack() }
         )
         NotificationScreenContent(notifications.value)
+    }
+    LaunchedEffect(Unit) {
+        settings[UNREAD_NOTIFICATION] = false
     }
 }
 
