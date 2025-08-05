@@ -244,7 +244,9 @@ fun ColumnScope.SlotsSections(
            }
             slotsConfirmationSheet.value = false
             sheetState.value = false
-            viewModel.createPanditSlot(slots.distinctBy { it.availableDate })
+            viewModel.createPanditSlot(
+                slots.distinctBy { Triple(it.availableDate, it.startTime, it.endTime) }
+            )
             temporarySelectedSlots.value = listOf()
         }
     }
