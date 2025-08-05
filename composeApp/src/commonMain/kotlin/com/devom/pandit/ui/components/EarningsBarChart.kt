@@ -116,7 +116,7 @@ fun EarningsBarChart(
         when (selectedOption) {
             "Week" -> {
                 val filtered = transactions.filter {
-                    it.type == TransactionType.CREDIT.status || it.type == TransactionType.REFUND.status
+                    it.type == TransactionType.CREDIT.status || (it.purpose != TransactionType.WITHDRAWAL.status && it.type == TransactionType.DEBIT.status)
                 }
                 DisplayCurrentWeekChart(filtered, timeZone) {
                     totalEarning.value = it.toString()
@@ -125,7 +125,7 @@ fun EarningsBarChart(
 
             "Year" -> {
                 val filtered = transactions.filter {
-                    it.type == TransactionType.CREDIT.status || it.type == TransactionType.REFUND.status
+                    it.type == TransactionType.CREDIT.status || (it.purpose != TransactionType.WITHDRAWAL.status && it.type == TransactionType.DEBIT.status)
                 }
                 DisplayCurrentYearChart(filtered, timeZone) {
                     totalEarning.value = it.toString()
@@ -302,7 +302,7 @@ fun sumByMonth(transactions: List<WalletTransaction>, currentYear: Int): List<Pa
         }.sumOf {
             when (it.type) {
                 TransactionType.CREDIT.status -> it.amount.toDoubleOrNull() ?: 0.0
-                TransactionType.REFUND.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
+                TransactionType.DEBIT.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
                 else -> 0.0
             }
         }.toInt()
@@ -330,7 +330,7 @@ fun sumByDay(
         }.sumOf {
             when (it.type) {
                 TransactionType.CREDIT.status -> it.amount.toDoubleOrNull() ?: 0.0
-                TransactionType.REFUND.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
+                TransactionType.DEBIT.status -> -(it.amount.toDoubleOrNull() ?: 0.0)
                 else -> 0.0
             }
         }.toInt()
