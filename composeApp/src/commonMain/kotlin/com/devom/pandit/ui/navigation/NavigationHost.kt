@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.apollographql.apollo.api.http.internal.urlDecode
 import com.devom.pandit.ASSET_LINK_BASE_URL
 import com.devom.pandit.ui.navigation.Screens.Biography
 import com.devom.pandit.ui.navigation.Screens.BookingDetails
@@ -173,7 +174,7 @@ fun NavigationHost(
             route = Screens.WebView.path.plus("/{url}"),
             arguments = listOf(navArgument("url") { type = NavType.StringType })
         ) {
-            WebView(url = it.arguments?.getString("url").orEmpty())
+            WebView(url = it.arguments?.getString("url").orEmpty().urlDecode())
         }
     }
 }

@@ -96,6 +96,8 @@
     <string name="cash_payment_required">This booking requires cash payment.</string>
     <string name="cancel">Cancel</string>
     <string name="about_you">Tell Us About Yourself</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
 
 
 </resources>

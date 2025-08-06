@@ -33,6 +33,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.apollographql.apollo.api.http.internal.urlEncode
 import com.devom.pandit.theme.primaryColor
 import com.devom.pandit.theme.text_style_h5
 import com.devom.pandit.theme.whiteColor
@@ -41,6 +42,7 @@ import com.devom.pandit.ui.navigation.Screens
 import com.devom.pandit.utils.toColor
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
+import com.devom.pandit.BASE_URL
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Biography
@@ -51,11 +53,15 @@ import pandijtapp.composeapp.generated.resources.help_support
 import pandijtapp.composeapp.generated.resources.ic_help_support
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
+import pandijtapp.composeapp.generated.resources.ic_privacy_policy
+import pandijtapp.composeapp.generated.resources.ic_question_rounded
 import pandijtapp.composeapp.generated.resources.ic_refer
 import pandijtapp.composeapp.generated.resources.ic_review
 import pandijtapp.composeapp.generated.resources.my_booking
 import pandijtapp.composeapp.generated.resources.my_wallet
+import pandijtapp.composeapp.generated.resources.privacy_policy
 import pandijtapp.composeapp.generated.resources.refer_earn
+import pandijtapp.composeapp.generated.resources.terms_and_conditions
 
 @Composable
 internal fun NavigationDrawerContent(
@@ -117,6 +123,24 @@ internal fun NavigationDrawerContent(
             text = stringResource(Res.string.refer_earn)
         ) {
             appNavHostController.navigate(Screens.ReferAndEarn.path)
+            onDismiss()
+        }
+
+        DrawerItem(
+            painter = painterResource(Res.drawable.ic_privacy_policy),
+            text = stringResource(Res.string.privacy_policy)
+        ) {
+            val encodedUrl = "https://devom.co.in/privacy-policy".urlEncode()
+            appNavHostController.navigate("${Screens.WebView.path}/$encodedUrl")
+            onDismiss()
+        }
+
+        DrawerItem(
+            painter = painterResource(Res.drawable.ic_question_rounded),
+            text = stringResource(Res.string.terms_and_conditions)
+        ) {
+            val encodedUrl ="https://devom.co.in/terms-conditions".urlEncode()
+            appNavHostController.navigate("${Screens.WebView.path}/$encodedUrl")
             onDismiss()
         }
     }
