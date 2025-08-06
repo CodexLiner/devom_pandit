@@ -35,6 +35,7 @@ import com.devom.pandit.theme.text_style_lead_text
 import com.devom.pandit.ui.components.ButtonPrimary
 import com.devom.pandit.ui.screens.booking.BookingViewModel
 import com.devom.models.slots.GetBookingsResponse
+import com.devom.pandit.theme.text_style_h4
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
@@ -100,6 +101,7 @@ fun PoojaStartEndScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
+                textAlign = TextAlign.Center,
                 text = titleText,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                 color = Color.Black
@@ -108,6 +110,7 @@ fun PoojaStartEndScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
+                textAlign = TextAlign.Center,
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
@@ -124,14 +127,16 @@ fun PoojaStartEndScreen(
                     .padding(horizontal = 41.dp, vertical = 20.dp)
             ) {
                 Text(
+                    minLines = 1,
                     text = buttonText,
-                    style = text_style_h5,
+                    style = text_style_lead_text,
                     color = Color.Gray
                 )
 
                 Text(
+                    minLines = 1,
                     text = amount,
-                    style = text_style_h2,
+                    style = text_style_h5,
                     color = Color.Black
                 )
             }
@@ -166,21 +171,20 @@ fun PoojaStartEndScreen(
                 fontStyle = text_style_lead_text
             )
 
-            // --- Google Login Button ---
-            ButtonPrimary(
-                fontStyle = text_style_lead_text,
-                buttonText = stringResource(Res.string.cancel),
-                textColor = Color.Black,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .border(1.dp, color = greyColor.copy(0.2f), shape = RoundedCornerShape(12.dp))
-            ) {
-                navHostController.navigateUp()
-            }
+//            ButtonPrimary(
+//                fontStyle = text_style_lead_text,
+//                buttonText = stringResource(Res.string.cancel),
+//                textColor = Color.Black,
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color.White,
+//                ),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(48.dp)
+//                    .border(1.dp, color = greyColor.copy(0.2f), shape = RoundedCornerShape(12.dp))
+//            ) {
+//                navHostController.navigateUp()
+//            }
         }
     }
 }

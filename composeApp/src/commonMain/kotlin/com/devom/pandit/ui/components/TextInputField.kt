@@ -30,6 +30,8 @@ fun TextInputField(
     placeholderColor: Color = com.devom.pandit.theme.inputColor,
     inputColor: Color = textBlackShade,
     cornerRadius: Dp = 12.dp,
+    minLines : Int = 1,
+    singleLine: Boolean = true,
     readOnly: Boolean = false,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -74,8 +76,10 @@ fun TextInputField(
                 modifier = Modifier.background(Color.Transparent)
             )
         },
+        minLines = minLines,
         enabled = enabled,
-        singleLine = true,
+        maxLines = 10,
+        singleLine = singleLine,
         shape = RoundedCornerShape(cornerRadius),
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,

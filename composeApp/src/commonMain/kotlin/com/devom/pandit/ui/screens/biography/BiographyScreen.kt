@@ -65,6 +65,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.Update
+import pandijtapp.composeapp.generated.resources.about_you
 import pandijtapp.composeapp.generated.resources.expertise
 import pandijtapp.composeapp.generated.resources.ic_arrow_left
 import pandijtapp.composeapp.generated.resources.ic_video_camera
@@ -291,6 +292,16 @@ fun BiographyForm(
                 onButtonStateChanged(checkButtonEnable())
             }
         )
+
+        TextInputField(
+            minLines = 5,
+            singleLine = false,
+            initialValue = (biography.value?.aboutUs.orEmpty()),
+            placeholder = stringResource(Res.string.about_you)
+        ) {
+            biographyInput.value = biographyInput.value.copy(aboutUs = it)
+            onButtonStateChanged(checkButtonEnable())
+        }
 
         Text(
             text = stringResource(Res.string.preferred_rituals),

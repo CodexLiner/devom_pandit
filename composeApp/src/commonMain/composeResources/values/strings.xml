@@ -95,6 +95,7 @@
     <string name="amount_to_collect">Amount to Collect:</string>
     <string name="cash_payment_required">This booking requires cash payment.</string>
     <string name="cancel">Cancel</string>
+    <string name="about_you">Tell Us About Yourself</string>
 
 
 </resources>
