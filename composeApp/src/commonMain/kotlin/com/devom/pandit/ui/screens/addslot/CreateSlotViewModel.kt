@@ -13,6 +13,7 @@ import com.devom.utils.network.withLoading
 import com.devom.utils.network.withSuccessWithoutData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalTime
 
 class CreateSlotViewModel : ViewModel() {
 
@@ -30,17 +31,23 @@ class CreateSlotViewModel : ViewModel() {
                 it.onResult {
                     this@CreateSlotViewModel.viewModelScope.launch {
                         _slots.emit(
-                            it.data.map {
-                                Slot(
-                                    availableDate = it.availableDate,
-                                    startTime = it.startTime,
-                                    endTime = it.endTime,
-                                    id = it.id,
-                                    panditId = it.panditId,
-                                    isBooked = it.isBooked,
-                                    createdAt = it.createdAt,
-                                    updatedAt = it.updatedAt
-                                )
+                            it.data.mapNotNull { slotDto ->
+                                val safeStart =
+                                    runCatching { LocalTime.parse(slotDto.startTime) }.getOrNull()
+                                val safeEnd =
+                                    runCatching { LocalTime.parse(slotDto.endTime) }.getOrNull()
+                                if (safeStart != null && safeEnd != null && safeStart.hour in 0..23 && safeEnd.hour in 0..23) {
+                                    Slot(
+                                        availableDate = slotDto.availableDate,
+                                        startTime = slotDto.startTime,
+                                        endTime = slotDto.endTime,
+                                        id = slotDto.id,
+                                        panditId = slotDto.panditId,
+                                        isBooked = slotDto.isBooked,
+                                        createdAt = slotDto.createdAt,
+                                        updatedAt = slotDto.updatedAt
+                                    )
+                                } else null
                             }
                         )
                     }
