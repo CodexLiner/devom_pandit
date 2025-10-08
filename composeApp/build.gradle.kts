@@ -100,14 +100,14 @@ kotlin {
 }
 
 android {
-    namespace = "com.devom.pandit"
+    namespace = "com.devom.pandit.app"
     compileSdk = 35
 
     defaultConfig {
         minSdk = 24
         targetSdk = 35
 
-        applicationId = "com.devom.pandit"
+        applicationId = "com.devom.pandit.app"
         versionCode = 1
         versionName = "1.0.0"
 
@@ -129,7 +129,7 @@ android {
         }
 
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
