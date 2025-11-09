@@ -11,8 +11,10 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,14 +30,18 @@ import com.devom.pandit.app.ui.screens.profile.ProfileScreen
 import com.devom.pandit.app.ui.screens.wallet.WalletScreen
 import com.devom.models.auth.UserRequestResponse
 import com.devom.models.payment.GetWalletBalanceResponse
+import com.devom.network.getUser
+import com.devom.utils.Application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import pandijtapp.composeapp.generated.resources.Res
 import pandijtapp.composeapp.generated.resources.ic_nav_add
 import pandijtapp.composeapp.generated.resources.ic_nav_bookings
 import pandijtapp.composeapp.generated.resources.ic_nav_home
 import pandijtapp.composeapp.generated.resources.ic_nav_profile
 import pandijtapp.composeapp.generated.resources.ic_nav_wallet
+import pandijtapp.composeapp.generated.resources.please_complete_your_profile
 
 @Composable
 fun DashboardScreen(appNavHostController: NavHostController) {
@@ -46,11 +52,25 @@ fun DashboardScreen(appNavHostController: NavHostController) {
     val scope = rememberCoroutineScope()
     val user = viewModel.user.collectAsState()
 
+    var isProfileCompleted = remember { isProfileComplete() }
+    val incompleteProfileToast = stringResource(Res.string.please_complete_your_profile)
+
+    LaunchedEffect(Unit) {
+        if (!isProfileComplete()) {
+            viewModel.onTabSelected(4)
+            Application.showToast(incompleteProfileToast)
+        }
+    }
+
+    LaunchedEffect(user.value) {
+        isProfileCompleted = isProfileComplete()
+    }
+
     val screens = listOf(
-        BottomNavigationScreen("home", "Home", Res.drawable.ic_nav_home, false),
-        BottomNavigationScreen("bookings", "Bookings", Res.drawable.ic_nav_bookings, false),
-        BottomNavigationScreen("add", "Add", Res.drawable.ic_nav_add, false),
-        BottomNavigationScreen("wallet", "Wallet", Res.drawable.ic_nav_wallet, false),
+        BottomNavigationScreen("home", "Home", Res.drawable.ic_nav_home, false , isProfileCompleted),
+        BottomNavigationScreen("bookings", "Bookings", Res.drawable.ic_nav_bookings, false , isProfileCompleted),
+        BottomNavigationScreen("add", "Add", Res.drawable.ic_nav_add, false , isProfileCompleted),
+        BottomNavigationScreen("wallet", "Wallet", Res.drawable.ic_nav_wallet, false , isProfileCompleted),
         BottomNavigationScreen("profile", "Profile", Res.drawable.ic_nav_profile, false),
     )
 
@@ -94,13 +114,18 @@ fun DashboardScreen(appNavHostController: NavHostController) {
                         }
                     }
 
-                    4 -> ProfileScreen(navHostController = appNavHostController, onUpdate = {
-                        viewModel.getUserProfile()
-                    }, onNavigationIconClick = {
-                        scope.launch {
-                            drawerState.open()
+                    4 -> ProfileScreen(
+                        navHostController = appNavHostController,
+                        onUpdate = {
+                            viewModel.getUserProfile()
+                            isProfileCompleted = isProfileComplete()
+                        },
+                        onNavigationIconClick = {
+                            scope.launch {
+                                drawerState.open()
+                            }
                         }
-                    })
+                    )
 
                     else -> HomeScreen(navHostController = appNavHostController) {
                         scope.launch {
@@ -160,4 +185,12 @@ fun DrawerContent(
             }
         }
     )
+}
+
+private fun isProfileComplete(): Boolean {
+    val user = getUser()
+    val requiredFields = listOf(
+        user.fullName, user.email, user.mobileNo, user.address, user.city
+    )
+    return requiredFields.all { it.isNotEmpty() }
 }
