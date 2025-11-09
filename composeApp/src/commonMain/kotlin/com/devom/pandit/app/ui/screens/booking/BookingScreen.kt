@@ -51,9 +51,18 @@ fun BookingScreen(navHostController: NavHostController , onNavigationIconClick: 
         AppBar(title = "Bookings", onNavigationIconClick = onNavigationIconClick)
         StatusTabRow(selectedTabIndex, tabs)
 
+        val listOfPending = listOf(
+            ApplicationStatus.PENDING.status,
+            ApplicationStatus.ACCEPTED.status,
+            ApplicationStatus.UPCOMING.status,
+            ApplicationStatus.CONFIRMED.status,
+            ApplicationStatus.VERIFIED.status,
+            ApplicationStatus.STARTED.status
+        )
+
         val filteredBookings = when (selectedTabIndex.value) {
-            0 -> bookings.value.filter { it.status.lowercase() != ApplicationStatus.COMPLETED.status && it.status.lowercase() != ApplicationStatus.REJECTED.status }
-            1 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.COMPLETED.status }
+            0 -> bookings.value.filter { it.status.lowercase() in listOfPending }
+            1 -> bookings.value.filter { it.status.lowercase() in listOfPending || it.status.lowercase() == ApplicationStatus.CANCELLED.status }
             2 -> bookings.value.filter { it.status.lowercase() == ApplicationStatus.REJECTED.status }
             else -> bookings.value
         }

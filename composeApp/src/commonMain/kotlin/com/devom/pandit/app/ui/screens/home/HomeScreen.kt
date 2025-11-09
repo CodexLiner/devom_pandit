@@ -124,9 +124,17 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
         }
         val today = Clock.System.now().toLocalDateTime()
 
+        val listOfPending = listOf(
+            ApplicationStatus.PENDING.status,
+            ApplicationStatus.ACCEPTED.status,
+            ApplicationStatus.UPCOMING.status,
+            ApplicationStatus.CONFIRMED.status,
+            ApplicationStatus.VERIFIED.status,
+            ApplicationStatus.STARTED.status
+        )
+
         val todayBookings = bookings.value.filter {
-            it.bookingDate.convertIsoToDate()
-                ?.toLocalDateTime()?.date == today.date && it.status.lowercase() != ApplicationStatus.COMPLETED.status && it.status.lowercase() != ApplicationStatus.REJECTED.status
+            it.bookingDate.convertIsoToDate()?.toLocalDateTime()?.date == today.date && it.status.lowercase() in listOfPending
         }
 
         if (todayBookings.isNotEmpty()) {
