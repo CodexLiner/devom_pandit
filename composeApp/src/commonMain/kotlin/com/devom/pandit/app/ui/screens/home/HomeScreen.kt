@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.devom.pandit.app.UNREAD_NOTIFICATION
 import com.devom.pandit.app.firebase.MyFirebaseMessagingService
+import com.devom.pandit.app.models.ApplicationStatus
 import com.devom.pandit.app.settings
 import com.devom.pandit.app.theme.backgroundColor
 import com.devom.pandit.app.theme.blackColor
@@ -124,7 +125,8 @@ fun HomeScreenContent(viewModel: HomeScreenViewModel, navHostController: NavHost
         val today = Clock.System.now().toLocalDateTime()
 
         val todayBookings = bookings.value.filter {
-            it.bookingDate.convertIsoToDate()?.toLocalDateTime()?.date == today.date
+            it.bookingDate.convertIsoToDate()
+                ?.toLocalDateTime()?.date == today.date && it.status.lowercase() != ApplicationStatus.COMPLETED.status && it.status.lowercase() != ApplicationStatus.REJECTED.status
         }
 
         if (todayBookings.isNotEmpty()) {
