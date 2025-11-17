@@ -131,6 +131,7 @@ object AuthManager {
                 Logger.d("ON_LOGOUT") { "user has been logged out" }
                 logout()
             }
+            enableLogging = false
             addHeaders {
                 append(UUID_KEY, uuid.orEmpty())
                 append(APPLICATION_ID , "com.devom.pandit")
