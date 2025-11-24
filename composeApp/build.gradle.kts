@@ -7,8 +7,8 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlinx.serialization)
-    id("com.google.gms.google-services") version "4.4.3"
-    id("com.google.firebase.crashlytics") version "3.0.5" apply true
+    id("com.google.gms.google-services") version "4.4.4"
+    id("com.google.firebase.crashlytics") version "3.0.6" apply true
 
 }
 
@@ -81,11 +81,11 @@ kotlin {
             implementation(libs.ktor.client.android)
             implementation(libs.androidx.appcompat)
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.16.0"))
-            implementation("com.google.firebase:firebase-messaging:23.4.0")
+            implementation("com.google.firebase:firebase-messaging:25.0.1")
 
-            implementation("com.google.android.gms:play-services-auth:21.0.0")
-            implementation("com.google.firebase:firebase-auth:22.3.1")
-            implementation("androidx.credentials:credentials:1.3.0")
+            implementation("com.google.android.gms:play-services-auth:21.4.0")
+            implementation("com.google.firebase:firebase-auth:24.0.1")
+            implementation("androidx.credentials:credentials:1.5.0")
             implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
             implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
             implementation("com.google.firebase:firebase-crashlytics-ndk")
@@ -108,7 +108,7 @@ android {
         targetSdk = 35
 
         applicationId = "com.devom.pandit.app"
-        versionCode = 2
+        versionCode = 3
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
