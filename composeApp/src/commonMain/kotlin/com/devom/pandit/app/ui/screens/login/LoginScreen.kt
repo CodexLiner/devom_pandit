@@ -142,7 +142,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
             fontStyle = text_style_lead_text,
         )
 
-        // --- Divider with OR ---
+      /*  // --- Divider with OR ---
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -189,7 +189,7 @@ fun LoginMainContent(navController: NavController , viewModel: LoginViewModel) {
                 viewModel.onGoogleSignIn(it)
                 Logger.d("GoogleSignIn $it")
             }
-        }
+        }*/
 
         // --- Sign Up link ---
         Box(

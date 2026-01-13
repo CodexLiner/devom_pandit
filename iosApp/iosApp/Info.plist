@@ -1,12 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict/>
-	</array>
-</dict>
+    <dict>
+
+        <key>CADisableMinimumFrameDurationOnPhone</key>
+        <true />
+
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict />
+        </array>
+        <key>NSContactsUsageDescription</key>
+        <string>
+            This app accesses your contacts so you can select and invite people for referrals by
+            sharing app links with them.
+        </string>
+
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>
+            This app accesses your photo library so you can select and upload images for your
+            profile, add photos to your service or pandit portfolio, and share these images with
+            users.
+        </string>
+
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>
+            This app saves images to your photo library when you download or save shared profile or
+            service portfolio images.
+        </string>
+
+        <key>NSCameraUsageDescription</key>
+        <string>
+            This app uses your camera so you can take photos for updating your profile, adding
+            images to your service or pandit portfolio, and sharing them with users.
+        </string>
+
+    </dict>
 </plist>
